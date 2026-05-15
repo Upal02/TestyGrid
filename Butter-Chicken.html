@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Butter Chicken (Murgh Makhani) — TastyGrid</title>
+<meta name="description" content="Butter Chicken (Murgh Makhani) — creamy tomato-cashew gravy with tender marinated chicken." />
+<style>
+  :root{
+    --bg: linear-gradient(180deg,#f6f8ff 0%,#f0f6ff 50%,#eef8ff 100%);
+    --card:#ffffff;
+    --muted:#52606d;
+    --text:#071428;
+    --accent:#ff6b6b;
+    --accent2:#7c3aed;
+    --shadow-lg: 0 28px 80px rgba(8,12,20,0.12);
+    --shadow-md: 0 12px 30px rgba(8,12,20,0.08);
+    --radius:14px;
+    --gap:22px;
+    --maxw:1120px;
+    --trans:260ms cubic-bezier(.2,.9,.3,1);
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+
+  /* Page container */
+  .page{
+    max-width:var(--maxw);
+    margin:28px auto;
+    padding:20px;
+    display:grid;
+    gap:var(--gap);
+  }
+
+  /* shimmer brand */
+  @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+  .brand-shimmer{background:linear-gradient(90deg,var(--accent),var(--accent2),#fff);background-clip:text;-webkit-background-clip:text;color:transparent;animation:shimmer 3.2s linear infinite;background-size:200% 100%}
+  @media (prefers-reduced-motion: reduce){ .brand-shimmer{animation:none;color:var(--text);-webkit-background-clip:unset;background:none} }
+
+  /* Card rows — consistent padding/margins */
+  .card-row{
+    background:var(--card);
+    padding:22px;
+    border-radius:12px;
+    box-shadow:var(--shadow-md);
+    transition:transform var(--trans),box-shadow var(--trans);
+    position:relative;
+    overflow:visible;
+  }
+  .card-row + .card-row{ /* consistent vertical spacing between rows */
+    margin-top:0;
+  }
+  .card-row:hover{ transform:translateY(-6px); box-shadow:var(--shadow-lg); }
+
+  /* header row (top) */
+  .top-row{ display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:8px; }
+  .brand-wrap{ display:flex; gap:12px; align-items:center; }
+  .logo-mark{ width:52px; height:52px; border-radius:10px; display:grid; place-items:center; color:white; font-weight:800; background:linear-gradient(135deg,var(--accent),var(--accent2)); font-size:18px; }
+  .brand-sub{ font-size:0.95rem; color:var(--muted); }
+
+  .header-back{
+    padding:8px 12px;
+    border-radius:10px;
+    border:none;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    color:white;
+    font-weight:700;
+    cursor:pointer;
+    background-size:200% 100%;
+    animation:shimmer 3.2s linear infinite;
+    box-shadow:0 12px 34px rgba(124,58,237,0.08);
+    transition:transform var(--trans),box-shadow var(--trans);
+  }
+  .header-back:hover{ transform:translateY(-4px) scale(1.02); box-shadow:0 28px 70px rgba(124,58,237,0.12); }
+  .header-back:focus{ outline:3px solid rgba(124,58,237,0.12); outline-offset:3px }
+  @media (prefers-reduced-motion: reduce){ .header-back{ animation:none } }
+
+  /* ROW 1: layout: hero (left) + meta (right)
+     hero is explicitly kept as 16:9 (landscape) and centered within its column.
+  */
+  .row-1-inner{
+    display:grid;
+    grid-template-columns: 1.7fr 1fr;
+    gap:20px;
+    align-items:center;
+  }
+  @media (max-width:980px){ .row-1-inner{ grid-template-columns:1fr; align-items:stretch } }
+
+  /* HERO: ensure landscape aspect + centered within left column */
+  .hero{
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 20px 60px rgba(8,12,20,0.08);
+    background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  /* Using aspect-ratio (preferred where supported) with padding fallback */
+  .hero-aspect{
+    width:100%;
+    max-width:100%;
+    aspect-ratio: 16 / 9;
+    position:relative;
+  }
+  /* fallback for older browsers: ensure padding-top exists */
+  .hero-aspect::before{ content:''; display:block; padding-top:56.25%; } /* 16:9 */
+  .hero-aspect > img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transition:transform var(--trans);
+    cursor:pointer;
+  }
+  .hero-aspect > img:hover{ transform:scale(1.02); }
+
+  /* meta column */
+  .meta{ display:flex; flex-direction:column; gap:12px; padding:6px 2px; justify-content:center; }
+  .title{ font-size:1.6rem; margin:0; }
+  .short{ color:var(--muted); margin:0; }
+
+  .meta-grid{ display:grid; grid-template-columns:1fr; gap:8px; font-size:0.95rem; color:var(--muted); }
+  .meta-row{ display:flex; justify-content:space-between; align-items:center; }
+  .badge{ padding:8px 14px; border-radius:999px; background:linear-gradient(90deg,var(--accent),var(--accent2)); color:white; font-weight:700; display:inline-block; }
+
+  /* Ingredients (single white area with two columns inside) */
+  .ingredients-columns{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+  }
+  @media (max-width:900px){ .ingredients-columns{ grid-template-columns:1fr } }
+  .ingredients-list{ margin:0; padding-left:18px; line-height:1.6; }
+  .ingredients-list li{ margin:8px 0; color:var(--text); }
+
+  /* Methods */
+  .methods-stack{ display:grid; gap:18px; }
+  .method p{ margin:0 0 12px 0; line-height:1.8; color:var(--text); }
+  .method p strong{ font-weight:700; }
+
+  /* Video embed */
+  .embed{ width:100%; max-width:980px; margin:0 auto; position:relative; padding-top:56.25%; border-radius:10px; overflow:hidden; box-shadow:0 20px 60px rgba(8,12,20,0.08); background:#000; }
+  .embed iframe{ position:absolute; left:0; top:0; width:100%; height:100%; border:0; }
+
+  .notes{ line-height:1.6; color:var(--muted); }
+
+  .footer{ display:flex; justify-content:center; }
+  .back-btn{ padding:12px 22px; border-radius:12px; border:none; background:linear-gradient(90deg,var(--accent),var(--accent2)); color:white; font-weight:700; cursor:pointer; background-size:200% 100%; animation:shimmer 3.2s linear infinite; box-shadow:0 24px 64px rgba(8,12,20,0.12); transition:transform var(--trans),box-shadow var(--trans); }
+  .back-btn:hover{ transform:translateY(-6px) scale(1.02); box-shadow:0 40px 100px rgba(8,12,20,0.18); }
+  @media (prefers-reduced-motion: reduce){ .back-btn{ animation:none } }
+
+  /* image modal (lightbox) */
+  .img-modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(2,6,23,0.6); z-index:9999; padding:20px; }
+  .img-modal.open{ display:flex; }
+  .img-modal .img-wrap{ max-width:1400px; width:100%; max-height:90vh; border-radius:10px; overflow:hidden; background:#000; display:grid; place-items:center; position:relative; }
+  .img-modal img{ width:100%; height:auto; max-height:90vh; object-fit:contain; display:block; }
+  .img-modal .close-btn{ position:absolute; right:16px; top:16px; background:rgba(255,255,255,0.95); border-radius:8px; padding:8px 10px; border:none; cursor:pointer; box-shadow:0 8px 28px rgba(2,6,23,0.16); }
+  @media (max-width:480px){ .img-modal .close-btn{ right:12px; top:12px; padding:6px 8px } }
+
+  /* accessibility focus */
+  [tabindex]:focus, button:focus, a:focus{ outline:3px solid rgba(124,58,237,0.12); outline-offset:3px; }
+
+</style>
+</head>
+<body>
+  <div class="page" role="main">
+
+    <!-- TOP ROW: header + hero + meta -->
+    <section class="card-row" aria-label="Top row — header, image & meta">
+      <div class="top-row" role="banner" aria-label="Header">
+        <div class="brand-wrap" aria-hidden="true">
+          <div class="logo-mark">TG</div>
+          <div>
+            <div class="brand-shimmer" style="font-weight:800">TastyGrid</div>
+            <div class="brand-sub">Trusted home recipes</div>
+          </div>
+        </div>
+
+        <!-- top-right back button -->
+        <div>
+          <a class="header-back" href="index.html" role="link" aria-label="Back to home (top)">← Back to Home</a>
+        </div>
+      </div>
+
+      <div class="row-1-inner">
+        <!-- HERO: 16:9 aspect; large landscape image that fills its column -->
+        <figure class="hero" aria-hidden="false" style="margin:0">
+          <div class="hero-aspect" aria-hidden="false">
+            <!-- EASY IMAGE SWAP: change src and data-large to your files/URLs -->
+            <img id="heroImg"
+                 src="Image/North Indian/Butter Chicken.jpg"
+                 data-large="Image/North Indian/Butter Chicken.jpg"
+                 alt="Butter Chicken — rich tomato-cashew gravy with chicken"
+                 loading="lazy"
+                 width="1600" height="900"
+                 tabindex="0"
+            />
+          </div>
+        </figure>
+
+        <div class="meta" role="region" aria-label="Recipe summary">
+          <h1 class="title">Butter Chicken (Murgh Makhani)</h1>
+          <p class="short">Iconic creamy tomato-cashew gravy with tender marinated chicken — slightly smoky, buttery and luxurious.</p>
+
+          <div class="meta-grid" aria-hidden="false">
+            <div class="meta-row"><span><strong>⭐ Rating</strong></span><span class="badge">4.8 ★</span></div>
+            <div class="meta-row"><span><strong>Difficulty</strong></span><span class="small">Medium</span></div>
+            <div class="meta-row"><span><strong>Serves</strong></span><span class="small">4</span></div>
+            <div class="meta-row"><span><strong>Time</strong></span><span class="small">Prep 20–30 min (+marination) • Cook 25–30 min</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INGREDIENTS -->
+    <section class="card-row" aria-label="Ingredients">
+      <h2 style="margin:0 0 12px 0;font-size:1.05rem">Ingredients</h2>
+      <div class="ingredients-columns" role="region" aria-label="Ingredients list">
+        <div>
+          <h3 style="margin:0 0 10px 0">For the Marinade</h3>
+          <ul class="ingredients-list" role="list">
+            <li>700 g boneless chicken (thighs preferred), cut into bite-sized pieces</li>
+            <li>1 cup yogurt (thick curd)</li>
+            <li>1 tbsp ginger–garlic paste</li>
+            <li>1 tsp red chili powder</li>
+            <li>1 tsp garam masala</li>
+            <li>1 tsp salt</li>
+            <li>1 tbsp lemon juice</li>
+            <li>1 tbsp oil</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 style="margin:0 0 10px 0">For the Gravy</h3>
+          <ul class="ingredients-list" role="list">
+            <li>3–4 large tomatoes (or 1½ cups tomato puree)</li>
+            <li>¼ cup cashews (soaked 15 min)</li>
+            <li>4 tbsp butter</li>
+            <li>½ cup fresh cream</li>
+            <li>1 tsp kasuri methi (optional)</li>
+            <li>1 tsp sugar</li>
+            <li>1 tsp ginger–garlic paste</li>
+            <li>Salt to taste</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- METHODS -->
+    <section class="card-row" aria-label="Method">
+      <h2 style="margin:0 0 12px 0;font-size:1.05rem">Method</h2>
+      <div class="methods-stack" role="region" aria-label="Method steps">
+        <article>
+          <h3 style="margin:0 0 10px 0">1. Marinate the chicken</h3>
+          <div class="method">
+            <p><strong>Mix the marinade:</strong> In a large bowl combine yogurt, ginger–garlic paste, red chili powder, garam masala, lemon juice, oil and salt. Whisk well so spices distribute evenly.</p>
+            <p><strong>Add chicken:</strong> Toss the chicken pieces into the marinade until fully coated. Cover and refrigerate for at least 2–4 hours; overnight is best for maximum tenderness and flavor.</p>
+          </div>
+        </article>
+
+        <article>
+          <h3 style="margin:0 0 10px 0">2. Cook the chicken</h3>
+          <div class="method">
+            <p><strong>Grill:</strong> Brush lightly with oil and grill until edges char slightly.</p>
+            <p><strong>Pan-sear:</strong> Heat a pan and sear until browned and cooked through.</p>
+            <p><strong>Bake:</strong> Roast at 200°C (400°F) until edges brown. Slight charring is desirable. Set cooked chicken aside.</p>
+          </div>
+        </article>
+
+        <article>
+          <h3 style="margin:0 0 10px 0">3. Make the tomato–cashew puree</h3>
+          <div class="method">
+            <p><strong>Sauté:</strong> Heat butter or oil, cook chopped tomatoes with ginger–garlic until soft and oil separates.</p>
+            <p><strong>Add cashews:</strong> Stir in soaked cashews and simmer briefly. Blend to a smooth puree for a silky gravy.</p>
+          </div>
+        </article>
+
+        <article>
+          <h3 style="margin:0 0 10px 0">4. Prepare the main gravy & finish</h3>
+          <div class="method">
+            <p><strong>Melt butter:</strong> Heat 4 tbsp butter, add puree and cook 6–8 minutes until oil separates.</p>
+            <p><strong>Add cream:</strong> Lower heat and add ½ cup cream; don't boil vigorously afterward.</p>
+            <p><strong>Combine:</strong> Add chicken, simmer 6–8 minutes. Finish with crushed kasuri methi, a swirl of cream and a cube of butter.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- VIDEO -->
+    <section class="card-row" aria-label="Video">
+      <h2 style="margin:0 0 12px 0;font-size:1.05rem">Watch this recipe</h2>
+      <div class="embed" role="region" aria-label="Recipe video">
+        <!-- Replace this src with the embed URL you want (example uses no-cookie) -->
+        <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/mA5XjhdwJHc?si=OzFnL7giCBWYG3ka&amp;start=1" title="Butter Chicken video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      </div>
+    </section>
+
+    <!-- NOTES -->
+    <section class="card-row notes" aria-label="Notes & Serving Suggestions">
+      <h2 style="margin:0 0 12px 0;font-size:1.05rem">Notes & Serving Suggestions</h2>
+      <p class="notes">Garnish with a swirl of cream and a small cube of butter. Serve hot with naan, lachha paratha, or jeera rice. For extra smokiness, lightly char the tomatoes or grill the marinated chicken before adding to the gravy.</p>
+      <p class="notes">Store leftovers refrigerated (2–3 days). Reheat gently and add a splash of water or cream if it thickens.</p>
+    </section>
+
+    <!-- footer -->
+    <div class="footer">
+      <a class="back-btn" href="index.html" aria-label="Back to home">← Back to Home</a>
+    </div>
+  </div>
+
+  <!-- IMAGE MODAL (lightbox) -->
+  <div id="imgModal" class="img-modal" role="dialog" aria-hidden="true" aria-label="Image preview">
+    <div class="img-wrap" role="document">
+      <button class="close-btn" id="imgModalClose" aria-label="Close image preview">Close ✕</button>
+      <img id="imgModalImg" src="" alt="Full-size preview">
+    </div>
+  </div>
+
+<script>
+/* Hero lightbox behavior (keeps focus & ESC handling).
+   Change #heroImg src and data-large attributes to swap images.
+*/
+(function(){
+  const hero = document.getElementById('heroImg');
+  const modal = document.getElementById('imgModal');
+  const modalImg = document.getElementById('imgModalImg');
+  const closeBtn = document.getElementById('imgModalClose');
+
+  if (!hero) return;
+
+  function openModal(){
+    const src = hero.dataset && hero.dataset.large ? hero.dataset.large : hero.src;
+    modalImg.src = src;
+    modalImg.alt = hero.alt || 'Image preview';
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden','false');
+    closeBtn.focus();
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(){
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden','true');
+    modalImg.src = '';
+    document.body.style.overflow = '';
+    try{ hero.focus(); }catch(e){}
+  }
+
+  hero.setAttribute('tabindex','0');
+  hero.addEventListener('click', (e)=>{ e.preventDefault(); openModal(); });
+  hero.addEventListener('keydown', (e)=> { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(); } });
+  hero.addEventListener('auxclick', (e)=>{ if (e.button === 1 || e.ctrlKey || e.metaKey) { const large = hero.dataset.large ? hero.dataset.large : hero.src; window.open(large, '_blank', 'noopener'); } });
+
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e)=>{ if (e.target === modal || e.target === modalImg.parentElement) closeModal(); });
+  window.addEventListener('keydown', (e)=>{ if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+
+})();
+</script>
+</body>
+</html>

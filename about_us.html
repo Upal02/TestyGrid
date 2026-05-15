@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>About — TastyGrid</title>
+<meta name="description" content="About TastyGrid — mission, team and values." />
+<style>
+:root{
+  --bg:#f4f7ff; --card:#fff; --muted:#52606d; --text:#071428;
+  --accent:#ff6b6b; --accent2:#7c3aed;
+  --header-bg: linear-gradient(90deg, rgba(124,58,237,0.12), rgba(255,107,107,0.08));
+  --shadow: 0 16px 40px rgba(12,18,30,0.08); --radius:12px; --trans:220ms;
+  --maxw:1100px;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
+a{color:inherit;text-decoration:none}
+.container{max-width:calc(var(--maxw) + 160px);margin:0 auto;padding:20px}
+
+/* header */
+.header-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;background:var(--header-bg);padding:10px;border-radius:12px;box-shadow:var(--shadow)}
+.brand{display:flex;align-items:center;gap:12px}
+.logo-mark{width:44px;height:44px;border-radius:10px;display:inline-grid;place-items:center;font-weight:800;color:white;font-size:16px;background:linear-gradient(135deg,var(--accent),var(--accent2))}
+.shimmer{background:linear-gradient(90deg,var(--accent),var(--accent2),#fff);background-clip:text;-webkit-background-clip:text;color:transparent;animation:shimmer 3.2s linear infinite;background-size:200% 100%}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* content */
+.card{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:20px}
+.hero{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+.hero .text{flex:1;min-width:260px}
+.hero .badge{padding:10px;border-radius:10px;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:700}
+.grid{display:grid;grid-template-columns:1fr 320px;gap:18px}
+@media (max-width:900px){ .grid{grid-template-columns:1fr} }
+
+/* team */
+.team{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px}
+.person{display:flex;gap:12px;align-items:center;padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(0,0,0,0.02),transparent)}
+.avatar{width:64px;height:64px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#fff;font-weight:800;font-size:1.1rem}
+
+/* footer */
+.footer{margin-top:18px;color:var(--muted);font-size:0.9rem}
+.icon-btn{padding:8px 10px;border-radius:10px;background:var(--card);border:1px solid rgba(0,0,0,0.04);box-shadow:var(--shadow)}
+</style>
+</head>
+<body>
+<div class="container" id="app">
+  <header class="header-row" role="banner">
+    <div class="brand" role="img" aria-label="TastyGrid">
+      <div class="logo-mark">TG</div>
+      <a href="index.html"><span class="shimmer">TastyGrid</span></a>
+    </div>
+    <nav style="display:flex;gap:8px;align-items:center">
+      <a class="icon-btn" href="index.html">Home</a>
+      <a class="icon-btn" href="feedback.html">Feedback</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="card hero" aria-labelledby="aboutTitle">
+      <div class="text">
+        <h1 id="aboutTitle" style="margin:0 0 8px 0">About TastyGrid</h1>
+        <p style="margin:0 0 10px;color:var(--muted)">We’re a small project dedicated to preserving home recipes and making cooking joyful and repeatable. TastyGrid helps you save family recipes, share tips, and discover flavors across India.</p>
+        <p style="margin:0 0 12px">Our mission: <strong>keep real food memories alive</strong> — by making recipes easy to read, adapt and share.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a class="icon-btn" href="index.html">Browse Recipes</a>
+          <a class="icon-btn" href="feedback.html">Send Feedback</a>
+        </div>
+      </div>
+      <div style="min-width:220px">
+        <div style="background:linear-gradient(135deg,var(--accent),var(--accent2));padding:18px;border-radius:12px;color:white">
+          <div style="font-weight:800;font-size:1.1rem">Why TastyGrid?</div>
+          <ul style="margin:10px 0 0 18px;color:rgba(255,255,255,0.95)">
+            <li>Simple, readable recipes</li>
+            <li>Mobile-friendly single-file pages</li>
+            <li>Low-friction sharing</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid" style="margin-top:16px">
+      <section class="card" aria-labelledby="teamTitle">
+        <h2 id="teamTitle" style="margin-top:0">Core Team</h2>
+
+        <!-- Only Upal is listed as requested -->
+        <div class="team" role="list">
+          <div class="person" role="listitem" aria-label="Upal — Founder">
+            <div class="avatar" aria-hidden="true">UP</div>
+            <div>
+              <strong>Upal</strong>
+              <div style="color:var(--muted)">Founder & Product</div>
+              <div style="color:var(--muted);font-size:0.9rem;margin-top:6px">USN: <strong>ENG22CS0495</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="margin-top:16px">Contact</h3>
+        <p style="color:var(--muted);margin:6px 0">For partnerships or media: <a href="mailto:hello@tastygrid.example">hello@tastygrid.example</a></p>
+      </section>
+
+      <aside class="card" aria-labelledby="valuesTitle">
+        <h3 id="valuesTitle" style="margin-top:0">Our values</h3>
+        <ol style="color:var(--muted);margin:8px 0 0 18px">
+          <li>Authenticity — real home recipes, not clickbait.</li>
+          <li>Clarity — clear steps & practical tips.</li>
+          <li>Community — share & preserve family flavors.</li>
+        </ol>
+
+        <h3 style="margin-top:14px">Contribute</h3>
+        <p style="color:var(--muted);margin:6px 0">Want to add recipes or corrections? Use the feedback page or send us a patch — every family recipe helps.</p>
+        <a class="icon-btn" href="feedback.html">Send Feedback</a>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="footer">TastyGrid — share tested home recipes. © <span id="yr"></span></footer>
+</div>
+
+<script>document.getElementById('yr').textContent=new Date().getFullYear();</script>
+</body>
+</html>

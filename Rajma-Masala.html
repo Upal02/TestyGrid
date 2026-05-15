@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Rajma Masala (Rajma Chawal) — TastyGrid</title>
+<meta name="description" content="Rajma Masala — comfort-style kidney beans cooked in rich masala; serve with steamed basmati rice."/>
+<style>
+  :root{
+    --bg: linear-gradient(180deg,#f6f8ff 0%,#f0f6ff 50%,#eef8ff 100%);
+    --card:#ffffff;
+    --muted:#52606d;
+    --text:#071428;
+    --accent:#ff6b6b;
+    --accent2:#7c3aed;
+    --shadow-lg: 0 28px 80px rgba(8,12,20,0.12);
+    --shadow-md: 0 12px 30px rgba(8,12,20,0.08);
+    --radius:14px;
+    --gap:22px;
+    --maxw:1120px;
+    --trans:260ms cubic-bezier(.2,.9,.3,1);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+
+  /* page */
+  .page{max-width:var(--maxw);margin:28px auto;padding:18px;display:grid;gap:var(--gap)}
+
+  /* shimmer animation used by brand text and header-back */
+  @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+  .brand-shimmer{background:linear-gradient(90deg,var(--accent),var(--accent2),#fff);background-clip:text;-webkit-background-clip:text;color:transparent;animation:shimmer 3.2s linear infinite;background-size:200% 100%}
+  @media (prefers-reduced-motion: reduce){ .brand-shimmer{animation:none;color:var(--text);-webkit-background-clip:unset;background:none} }
+
+  /* Generic card-row */
+  .card-row{background:var(--card);padding:20px;border-radius:12px;box-shadow:var(--shadow-md);transition:transform var(--trans),box-shadow var(--trans);position:relative;overflow:visible}
+  .card-row:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
+
+  /* Top header small row inside first card-row */
+  .top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .brand-wrap{display:flex;gap:12px;align-items:center}
+  .logo-mark{width:52px;height:52px;border-radius:10px;display:grid;place-items:center;color:white;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));font-size:18px}
+  .brand-text{display:flex;flex-direction:column}
+  .brand-sub{font-size:0.95rem;color:var(--muted)}
+
+  /* header back button (top-right) - uses shimmer-like gradient effect */
+  .header-back{
+    padding:8px 12px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;font-weight:700;cursor:pointer;
+    background-size:200% 100%;animation:shimmer 3.2s linear infinite;box-shadow:0 12px 34px rgba(124,58,237,0.08);transition:transform var(--trans),box-shadow var(--trans);
+  }
+  .header-back:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 28px 70px rgba(124,58,237,0.12)}
+  .header-back:focus{outline:3px solid rgba(124,58,237,0.12);outline-offset:3px}
+  @media (prefers-reduced-motion: reduce){ .header-back{animation:none} }
+
+  /* ROW 1 - image + meta */
+  .row-1-inner{display:grid;grid-template-columns:1.7fr 1fr;gap:20px;align-items:center}
+  @media (max-width:980px){ .row-1-inner{grid-template-columns:1fr;align-items:stretch} }
+
+  /* HERO IMAGE — fixed landscape aspect and responsive max-height
+     - Uses aspect-ratio: 16/9 so the image is always landscape.
+     - max-height controls how tall the hero gets on larger screens.
+     - The <img> fills the hero area with object-fit:cover (no distortion).
+  */
+  .hero{
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 20px 60px rgba(8,12,20,0.08);
+    background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4));
+    aspect-ratio: 16 / 9;           /* force landscape aspect */
+    width: 100%;
+    max-height: 460px;             /* cap height on large screens */
+    display:block;
+  }
+  .hero picture,
+  .hero img{display:block;width:100%;height:100%}
+  .hero img{object-fit:cover;transition:transform var(--trans);}
+
+  /* responsive adjustments keep the landscape feel but reduce max height */
+  @media (max-width:1280px){
+    .hero{max-height:420px}
+  }
+  @media (max-width:980px){
+    .hero{max-height:320px; aspect-ratio: 16 / 9}
+  }
+  @media (max-width:600px){
+    .hero{max-height:240px; aspect-ratio: 16 / 9}
+  }
+
+  .meta{display:flex;flex-direction:column;gap:12px;padding:6px 2px;justify-content:center}
+  .title{font-size:1.6rem;margin:0}
+  .short{color:var(--muted);margin:0}
+  .meta-grid{display:grid;grid-template-columns:1fr;gap:8px;font-size:0.95rem;color:var(--muted)}
+  .meta-row{display:flex;justify-content:space-between;align-items:center}
+  .badge{padding:8px 14px;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;font-weight:700;display:inline-block}
+
+  /* Ingredients */
+  .ingredients-columns{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media (max-width:900px){ .ingredients-columns{grid-template-columns:1fr} }
+  .ingredients-list{margin:0;padding-left:18px;line-height:1.6}
+  .ingredients-list li{margin:8px 0;color:var(--text)}
+
+  /* Methods */
+  .methods-stack{display:grid;gap:18px}
+  .method p{margin:0 0 12px 0;line-height:1.8;color:var(--text)}
+  .method p strong{font-weight:700}
+
+  /* Video - plain responsive iframe */
+  .embed{width:100%;max-width:980px;margin:0 auto;position:relative;padding-top:56.25%;border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(8,12,20,0.08);transition:transform var(--trans);background:#000}
+  .embed iframe{position:absolute;left:0;top:0;width:100%;height:100%;border:0}
+
+  .notes{line-height:1.6;color:var(--muted)}
+  .footer{display:flex;justify-content:center;margin-top:6px}
+  .back-btn{padding:12px 22px;border-radius:12px;border:none;background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;font-weight:700;cursor:pointer;background-size:200% 100%;animation:shimmer 3.2s linear infinite;box-shadow:0 24px 64px rgba(8,12,20,0.12);transition:transform var(--trans),box-shadow var(--trans)}
+  .back-btn:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 40px 100px rgba(8,12,20,0.18)}
+  @media (prefers-reduced-motion: reduce){ .back-btn{animation:none} }
+  [tabindex]:focus, button:focus, a:focus{outline:3px solid rgba(124,58,237,0.12);outline-offset:3px}
+
+  /* Mini-chef (kept minimal, same as before) */
+  :root{--mini-scale:7}
+  .mini-chef-wrapper{position:absolute;right:12px;bottom:12px;width:calc(96px * var(--mini-scale) / 7);height:calc(96px * var(--mini-scale) / 7);pointer-events:none;opacity:0;transform:translateY(6px) scale(0.96);transition:opacity .28s ease, transform .28s ease;z-index:60}
+  .card-row:hover .mini-chef-wrapper,.card-row:focus-within .mini-chef-wrapper{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+  .mini-speech{position:absolute;right:110%;bottom:10%;background:#fff;border-radius:6px;padding:6px 8px;font-size:11px;box-shadow:0 6px 16px rgba(2,6,23,0.12);color:#0f172a;opacity:0;transform:translateY(4px);transition:all .22s ease-in-out;pointer-events:none;white-space:nowrap}
+  .mini-chef-wrapper.show-speech .mini-speech{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+  <div class="page" role="main">
+
+    <!-- ROW 1: top card-row (image + meta) -->
+    <section class="card-row" aria-label="Top row — image and meta">
+      <div class="top-row" role="banner" aria-label="Header">
+        <div class="brand-wrap" aria-hidden="true">
+          <div class="logo-mark">TG</div>
+          <div class="brand-text">
+            <div class="brand-shimmer" style="font-weight:800">TastyGrid</div>
+            <div class="brand-sub">Trusted home recipes</div>
+          </div>
+        </div>
+
+        <!-- header back button (top-right) -->
+        <div>
+          <a class="header-back" href="index.html" role="link" aria-label="Back to home (top)" title="Back to home">← Back to Home</a>
+        </div>
+      </div>
+
+      <div class="row-1-inner">
+        <!-- hero: landscape, responsive -->
+        <figure class="hero" aria-hidden="false" style="margin:0">
+          <picture>
+            <!-- Replace with your actual image path -->
+            <source type="image/jpeg" srcset="Image/North Indian/Rajma Masala (Rajma Chawal).jpeg">
+            <img src="Image/North Indian/Rajma Masala (Rajma Chawal).jpeg" alt="Rajma Masala — kidney beans in rich gravy with rice" loading="lazy" width="1600" height="900" data-image-default="Image/North Indian/Rajma Masala (Rajma Chawal).jpeg">
+          </picture>
+        </figure>
+
+        <div class="meta" role="region" aria-label="Recipe summary">
+          <h1 class="title">Rajma Masala (Rajma Chawal)</h1>
+          <p class="short">Comfort-style kidney beans simmered in a rich masala — serve with steamed basmati rice and a dollop of ghee.</p>
+
+          <div class="meta-grid" aria-hidden="false">
+            <div class="meta-row"><span><strong>⭐ Rating</strong></span><span class="badge">4.6 ★</span></div>
+            <div class="meta-row"><span><strong>Difficulty</strong></span><span class="small">Easy–Medium</span></div>
+            <div class="meta-row"><span><strong>Serves</strong></span><span class="small">4</span></div>
+            <div class="meta-row"><span><strong>Time</strong></span><span class="small">Prep 10–15 min (+ soaking) • Cook 30–40 min</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROW 2: Ingredients -->
+    <section class="card-row" aria-label="Ingredients">
+      <h2 style="margin:0 0 12px 0;font-size:1.05rem">Ingredients</h2>
+
+      <div class="ingredients-columns" role="region" aria-label="Ingredients list">
+        <div>
+          <h3 style="margin:0 0 10px 0">For the Rajma</h3>
+          <ul class="ingredients-list" role="list" aria-labelledby="rajmaHeading">
+            <li>1½ cups rajma (kidney beans), soaked 8–10 hours</li>
+            <li>3–4 cups water</li>
+            <li>Salt to taste</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 style="margin:0 0 10px 0">For the Masala</h3>
+          <ul class="ingredients-list" role="list" aria-labelledby="masalaHeading">
+            <li>2 onions, finely chopped</li>
+            <li>2 tomatoes, pureed</li>
+            <li>1 tbsp ginger–garlic paste</li>
+            <li>1 tsp turmeric powder</li>
+            <li>1 tsp red chilli powder</li>
+            <li>1 tbsp rajma masala (or garam masala)</li>
+            <li>3 tbsp oil or ghee</li>
+            <li>Fresh coriander (for garnish)</li>
+            <li>Steamed basmati rice (to serve)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- mini-chef appears bottom-right on hover (kept, optional) -->
+      <div class="mini-chef-wrapper" data-video="" aria-hidden="true">
+        <button class="mini-chef-chef-btn" aria-pressed="false" title="Chef" aria-label="Chef animation">
+          <div class="mini-chef-pixelwrap" aria-hidden="false">
+            <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+              <rect width="72" height="72" fill="transparent"/><g class="mini-body"><path d="M22 48 L50 48 L44 64 L28 64 Z" fill="#2b8a5f"/></g>
+            </svg>
+          </div>
+        </button>
+        <div class="mini-speech" aria-hidden="true">Tossing!</div>
+      </div>
+    </section>
+
+    <!-- ROW 3: Methods -->
+    <section class="card-row" aria-label="Method">
+      <h2 style="margin:0 0 12px 0;font-size:1.05rem">Method</h2>
+
+      <div class="methods-stack" role="region" aria-label="Method steps">
+        <article>
+          <h3 style="margin:0 0 10px 0">1. Pressure cook the rajma</h3>
+          <div class="method">
+            <p><strong>Drain & add to cooker:</strong> Drain the soaked rajma and add it to a pressure cooker with 3–4 cups of water and a pinch of salt. Cook for 6–8 whistles, or until the beans become very soft. (The softer the rajma, the creamier the gravy.)</p>
+          </div>
+        </article>
+
+        <article>
+          <h3 style="margin:0 0 10px 0">2. Make the masala base</h3>
+          <div class="method">
+            <p><strong>Heat fat:</strong> Heat oil or ghee in a pan.</p>
+            <p><strong>Sauté onions:</strong> Add the chopped onions and sauté until they turn golden brown.</p>
+            <p><strong>Ginger-garlic & tomatoes:</strong> Stir in ginger–garlic paste until raw aroma disappears, then pour in tomato puree and cook until oil starts separating from the sides — your masala is ready.</p>
+          </div>
+        </article>
+
+        <article>
+          <h3 style="margin:0 0 10px 0">3. Add spices & simmer</h3>
+          <div class="method">
+            <p><strong>Spice it up:</strong> Mix in turmeric, red chilli powder, and rajma masala. Add the cooked rajma with some cooking liquid and let it simmer on low for 20–30 minutes until the gravy thickens and beans absorb the flavours. Taste and adjust salt.</p>
+          </div>
+        </article>
+
+        <article>
+          <h3 style="margin:0 0 10px 0">4. Serve</h3>
+          <div class="method">
+            <p><strong>Finish:</strong> Garnish with chopped coriander and serve hot with steamed basmati rice. Add a small dollop of ghee for a comforting finish.</p>
+          </div>
+        </article>
+
+        <article>
+          <h3 style="margin:0 0 10px 0">Tip</h3>
+          <div class="method">
+            <p>Lightly mash about 1 cup of the cooked beans and add them back to the pot — this naturally thickens the gravy and makes it restaurant-style creamy.</p>
+          </div>
+        </article>
+      </div>
+
+      <!-- mini-chef for methods card (kept) -->
+      <div class="mini-chef-wrapper" data-video="" aria-hidden="true">
+        <button class="mini-chef-chef-btn" aria-pressed="false" title="Chef" aria-label="Chef animation">
+          <div class="mini-chef-pixelwrap" aria-hidden="false"><svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true"><rect width="72" height="72" fill="transparent"/></svg></div>
+        </button>
+        <div class="mini-speech" aria-hidden="true">Tossing!</div>
+      </div>
+    </section>
+
+    <!-- ROW 4: Video - using your provided plain iframe -->
+    <section class="card-row" aria-label="Video">
+      <h2 style="margin:0 0 12px 0;font-size:1.05rem">Watch this recipe</h2>
+
+      <div class="embed" role="region" aria-label="Recipe video">
+        <!-- Plain responsive iframe (your exact iframe URL and attributes retained) -->
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/4TAmm-6YE4Y?si=UpiWeYu0o8KHi0Ci" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>      </div>
+    </section>
+
+    <!-- ROW 5: Notes & serving -->
+    <section class="card-row notes" aria-label="Notes & Serving Suggestions">
+      <h2 style="margin:0 0 12px 0;font-size:1.05rem">Notes & Serving Suggestions</h2>
+      <p class="notes">Serve hot with steamed basmati rice and a small dollop of ghee. Refrigerate leftovers up to 3 days and reheat gently, adding a splash of water if the gravy thickens.</p>
+      <p class="notes">Tip: Mash 1 cup of cooked beans and add back to the pot to thicken the gravy and create a restaurant-style texture.</p>
+    </section>
+
+    <!-- footer -->
+    <div class="footer">
+      <a class="back-btn" href="index.html" aria-label="Back to home">← Back to Home</a>
+    </div>
+
+  </div>
+
+<!-- mini-chef interactivity (kept) -->
+<script>
+(function(){
+  function isActivationKey(e){ return e.key === 'Enter' || e.key === ' ' || e.code === 'Space' || e.key === 'Spacebar'; }
+  const wrappers = document.querySelectorAll('.mini-chef-wrapper');
+  wrappers.forEach(wrapper => {
+    const btn = wrapper.querySelector('.mini-chef-chef-btn');
+    const speech = wrapper.querySelector('.mini-speech');
+    const watchUrl = (wrapper.dataset && wrapper.dataset.video) ? wrapper.dataset.video.trim() : '';
+
+    const live = document.createElement('div');
+    live.setAttribute('aria-live','polite');
+    live.style.position='absolute'; live.style.left='-9999px'; document.body.appendChild(live);
+
+    let cycleTimer = null, speechTimer = null, hideSpeechTimer = null;
+
+    function showSpeech(text){
+      if(!speech) return;
+      speech.classList.add('show');
+      speech.style.opacity='1';
+      speech.style.transform='translateY(0)';
+      live.textContent = text;
+      clearTimeout(hideSpeechTimer);
+      hideSpeechTimer = setTimeout(()=> {
+        speech.style.opacity=''; speech.style.transform=''; live.textContent=''; speech.classList.remove('show');
+      }, 1200);
+    }
+
+    function startStirOnce(){
+      if(!btn) return;
+      btn.setAttribute('aria-pressed','true');
+      btn.classList.add('is-stir');
+      live.textContent = 'Chef is stirring';
+      clearTimeout(cycleTimer);
+      cycleTimer = setTimeout(()=> {
+        btn.classList.remove('is-stir');
+        btn.setAttribute('aria-pressed','false');
+        showSpeech('Tossed!');
+      }, 1000);
+    }
+
+    btn.addEventListener('mouseenter', ()=> { btn.classList.add('is-stir'); btn.setAttribute('aria-pressed','true'); });
+    btn.addEventListener('mouseleave', ()=> { btn.classList.remove('is-stir'); btn.setAttribute('aria-pressed','false'); clearTimeout(speechTimer); speechTimer = setTimeout(()=> showSpeech('Nice toss!'), 500); });
+
+    btn.addEventListener('click', (e)=> {
+      e.preventDefault();
+      if(watchUrl){
+        try{ window.open(watchUrl, '_blank', 'noopener'); } catch(err){ window.location.href = watchUrl; }
+      } else {
+        // fallback: open the video page on YouTube
+        window.open('https://www.youtube-nocookie.com/watch?v=e7N93e5dKtM', '_blank', 'noopener');
+      }
+      startStirOnce();
+    });
+
+    btn.addEventListener('touchstart', (e)=> { e.preventDefault(); if(watchUrl){ try{ window.open(watchUrl,'_blank','noopener'); } catch(err){ window.location.href=watchUrl; } } else { window.open('https://www.youtube-nocookie.com/watch?v=e7N93e5dKtM', '_blank', 'noopener'); } startStirOnce(); }, {passive:false});
+
+    btn.addEventListener('keydown', (e)=> {
+      if(isActivationKey(e)){
+        e.preventDefault();
+        if(watchUrl){ try{ window.open(watchUrl,'_blank','noopener'); } catch(err){ window.location.href=watchUrl; } }
+        else { window.open('https://www.youtube-nocookie.com/watch?v=e7N93e5dKtM', '_blank', 'noopener'); }
+        startStirOnce();
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

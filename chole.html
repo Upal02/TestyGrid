@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Chole (Standalone) — TastyGrid</title>
+<meta name="description" content="Chole — hearty chickpea curry. Comfort food across North India." />
+<style>
+  :root{
+    --bg: linear-gradient(180deg,#f6f8ff 0%,#f0f6ff 50%,#eef8ff 100%);
+    --card:#fff; --muted:#52606d; --text:#071428;
+    --accent:#ff6b6b; --accent2:#7c3aed; --shadow-lg:0 28px 80px rgba(8,12,20,0.12);
+    --shadow-md:0 12px 30px rgba(8,12,20,0.08); --gap:22px; --maxw:1120px; --trans:260ms cubic-bezier(.2,.9,.3,1);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text)}
+  a{color:inherit;text-decoration:none}
+  .page{max-width:var(--maxw);margin:28px auto;padding:20px;display:grid;gap:var(--gap)}
+  @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+  .brand-shimmer{background:linear-gradient(90deg,var(--accent),var(--accent2),#fff);background-clip:text;-webkit-background-clip:text;color:transparent;animation:shimmer 3.2s linear infinite;background-size:200% 100%}
+  .card-row{background:var(--card);padding:22px;border-radius:12px;box-shadow:var(--shadow-md);transition:transform var(--trans),box-shadow var(--trans);position:relative}
+  .card-row:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
+  .top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .logo-mark{width:52px;height:52px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white}
+  .header-back{padding:8px 12px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;font-weight:700;cursor:pointer;animation:shimmer 3.2s linear infinite}
+  .row-1-inner{display:grid;grid-template-columns:1.7fr 1fr;gap:20px;align-items:center}
+  @media (max-width:980px){ .row-1-inner{grid-template-columns:1fr} }
+  .hero{border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(8,12,20,0.08);background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4));display:flex;align-items:center;justify-content:center}
+  .hero-aspect{width:100%;aspect-ratio:16/9;position:relative}
+  .hero-aspect::before{content:'';display:block;padding-top:56.25%}
+  .hero-aspect>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform var(--trans);cursor:pointer}
+  .meta{display:flex;flex-direction:column;gap:12px;padding:6px 2px;justify-content:center}
+  .title{font-size:1.6rem;margin:0}
+  .ingredients-columns{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media (max-width:900px){ .ingredients-columns{grid-template-columns:1fr} }
+  .ingredients-list{margin:0;padding-left:18px;line-height:1.6}
+  .methods-stack{display:grid;gap:18px}
+  .method p{margin:0 0 12px 0;line-height:1.8;color:var(--text)}
+  .embed{width:100%;max-width:980px;margin:0 auto;position:relative;padding-top:56.25%;border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(8,12,20,0.08);background:#000}
+  .embed iframe{position:absolute;left:0;top:0;width:100%;height:100%;border:0}
+  .notes{line-height:1.6;color:var(--muted)}
+  .footer{display:flex;justify-content:center}
+  .back-btn{padding:12px 22px;border-radius:12px;border:none;background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;font-weight:700;cursor:pointer;animation:shimmer 3.2s linear infinite}
+  .img-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.6);z-index:9999;padding:20px}
+  .img-modal.open{display:flex}
+  .img-wrap{max-width:1400px;width:100%;max-height:90vh;border-radius:10px;overflow:hidden;background:#000;display:grid;place-items:center;position:relative}
+  .close-btn{position:absolute;right:16px;top:16px;background:rgba(255,255,255,0.95);border-radius:8px;padding:8px 10px;border:none;cursor:pointer}
+  [tabindex]:focus,button:focus,a:focus{outline:3px solid rgba(124,58,237,0.12);outline-offset:3px}
+</style>
+</head>
+<body>
+  <div class="page">
+
+    <section class="card-row">
+      <div class="top-row">
+        <div style="display:flex;gap:12px;align-items:center">
+          <div class="logo-mark">TG</div>
+          <div>
+            <div class="brand-shimmer" style="font-weight:800">TastyGrid</div>
+            <div style="font-size:0.95rem;color:var(--muted)">Trusted home recipes</div>
+          </div>
+        </div>
+        <div><a class="header-back" href="index.html">← Back to Home</a></div>
+      </div>
+
+      <div class="row-1-inner">
+        <figure class="hero" style="margin:0">
+          <div class="hero-aspect">
+            <img id="heroImg" src="Image/North Indian/Chole Masala.jpg" data-large="Image/North Indian/Chole Masala.jpg" alt="Chole — hearty chickpea curry" loading="lazy" width="1600" height="900" tabindex="0">
+          </div>
+        </figure>
+
+        <div class="meta">
+          <h1 class="title">Chole (Standalone)</h1>
+          <p style="margin:0;color:var(--muted)">Hearty chickpea curry — everyday comfort food. Serve with rice, roti or bhature.</p>
+
+          <div style="display:grid;gap:8px;color:var(--muted);font-size:0.95rem;margin-top:8px">
+            <div style="display:flex;justify-content:space-between"><strong>⭐ Rating</strong><span class="badge">4.5 ★</span></div>
+            <div style="display:flex;justify-content:space-between"><strong>Difficulty</strong><span>Easy–Medium</span></div>
+            <div style="display:flex;justify-content:space-between"><strong>Yields</strong><span>4 servings</span></div>
+            <div style="display:flex;justify-content:space-between"><strong>Time</strong><span>Prep 15–20 min (+soak) • Cook 35–45 min</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card-row">
+      <h2 style="margin:0 0 12px 0;font-size:1.05rem">Ingredients</h2>
+      <div class="ingredients-columns">
+        <div>
+          <h3 style="margin:0 0 10px 0">Chole</h3>
+          <ul class="ingredients-list">
+            <li>1½ cups dried chickpeas (soak 8–10 hours)</li>
+            <li>1 tea bag (optional — color)</li>
+            <li>2 bay leaves, 1 black cardamom, 1 tsp cumin seeds</li>
+            <li>2 medium onions, finely chopped; 3 tomatoes, pureed</li>
+            <li>1 tbsp ginger–garlic paste; 1–2 green chilies</li>
+            <li>1½ tbsp chole/chana masala; 1 tsp turmeric; 1 tsp red chili powder</li>
+            <li>1 tsp garam masala; salt; 3 tbsp oil or ghee; coriander & lemon</li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="margin:0 0 10px 0">Serve with</h3>
+          <ul class="ingredients-list">
+            <li>Steamed rice, roti, poori or bhature</li>
+            <li>Sliced raw onions, lemon wedges, pickles</li>
+            <li>Optional: knob of ghee to finish</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card-row">
+      <h2 style="margin:0 0 12px 0;font-size:1.05rem">Method</h2>
+      <div class="methods-stack">
+        <article>
+          <h3 style="margin:0 0 10px 0">1. Soak & cook chickpeas</h3>
+          <div class="method">
+            <p><strong>Soak:</strong> Rinse and soak chickpeas 8–10 hours. Drain and place in pressure cooker with 3 cups water, pinch salt, bay leaf, black cardamom and optional tea bag. Cook ~6–7 whistles until tender but not mushy. Reserve cooking liquid.</p>
+          </div>
+        </article>
+
+        <article>
+          <h3 style="margin:0 0 10px 0">2. Make the masala</h3>
+          <div class="method">
+            <p><strong>Masala:</strong> Heat oil/ghee, add cumin seeds. Sauté onions till deep golden-brown. Add ginger–garlic, then tomato puree and spices. Cook till oil separates and masala darkens — patience here builds flavor.</p>
+          </div>
+        </article>
+
+        <article>
+          <h3 style="margin:0 0 10px 0">3. Combine & simmer</h3>
+          <div class="method">
+            <p><strong>Combine:</strong> Add cooked chickpeas with some cooking liquid. Bring to boil then simmer 20–25 minutes so flavors meld. Mash a few chickpeas against pot side to thicken naturally. Finish with garam masala and garnish.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="card-row">
+      <h2 style="margin:0 0 12px 0;font-size:1.05rem">Watch this recipe</h2>
+      <div class="embed" role="region" aria-label="Recipe video">
+        <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/mA5XjhdwJHc?si=OzFnL7giCBWYG3ka&amp;start=1" title="Chole recipe" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      </div>
+    </section>
+
+    <section class="card-row notes">
+      <h2 style="margin:0 0 12px 0;font-size:1.05rem">Notes & Serving</h2>
+      <p class="notes">For deeper color add a tea bag while cooking (remove later). If chickpeas are hard add a pinch of baking soda while cooking. Finish with ghee for richer flavor. Serve hot.</p>
+    </section>
+
+    <div class="footer"><a class="back-btn" href="index.html">← Back to Home</a></div>
+  </div>
+
+  <div id="imgModal" class="img-modal" role="dialog" aria-hidden="true">
+    <div class="img-wrap">
+      <button class="close-btn" id="imgModalClose">Close ✕</button>
+      <img id="imgModalImg" src="" alt="Full-size preview">
+    </div>
+  </div>
+
+<script>
+(function(){
+  const hero = document.getElementById('heroImg');
+  const modal = document.getElementById('imgModal');
+  const modalImg = document.getElementById('imgModalImg');
+  const closeBtn = document.getElementById('imgModalClose');
+  if(!hero) return;
+  function openModal(){ const src = hero.dataset&&hero.dataset.large?hero.dataset.large:hero.src; modalImg.src=src; modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); closeBtn.focus(); document.body.style.overflow='hidden'; }
+  function closeModal(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); modalImg.src=''; document.body.style.overflow=''; try{hero.focus()}catch{} }
+  hero.setAttribute('tabindex','0');
+  hero.addEventListener('click', e=>{ e.preventDefault(); openModal(); });
+  hero.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' ') { e.preventDefault(); openModal(); } });
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', e=>{ if(e.target===modal||e.target===modalImg.parentElement) closeModal(); });
+  window.addEventListener('keydown', e=>{ if(e.key==='Escape' && modal.classList.contains('open')) closeModal(); });
+})();
+</script>
+</body>
+</html>

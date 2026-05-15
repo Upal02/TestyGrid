@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Feedback — TastyGrid</title>
+<meta name="description" content="Send feedback, report issues, or submit new recipes." />
+<style>
+:root{
+  --bg:#f4f7ff; --card:#fff; --muted:#52606d; --text:#071428;
+  --accent:#ff6b6b; --accent2:#7c3aed; --header-bg: linear-gradient(90deg, rgba(124,58,237,0.12), rgba(255,107,107,0.08));
+  --shadow: 0 16px 40px rgba(12,18,30,0.08); --radius:12px; --trans:220ms; --maxw:1100px;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
+.container{max-width:calc(var(--maxw) + 160px);margin:0 auto;padding:20px}
+.header-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;background:var(--header-bg);padding:10px;border-radius:12px;box-shadow:var(--shadow)}
+.logo-mark{width:44px;height:44px;border-radius:10px;display:inline-grid;place-items:center;font-weight:800;color:white;background:linear-gradient(135deg,var(--accent),var(--accent2))}
+.card{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:18px}
+.form-row{display:grid;grid-template-columns:1fr 320px;gap:18px}
+@media (max-width:900px){ .form-row{grid-template-columns:1fr} }
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.input,textarea,select{padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);font:inherit}
+button.primary{padding:10px 14px;border-radius:10px;border:0;background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;font-weight:700}
+.small{font-size:0.9rem;color:var(--muted)}
+.success{background:linear-gradient(90deg,rgba(124,58,237,0.06),rgba(124,58,237,0.02));padding:10px;border-radius:10px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="header-row" role="banner">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="logo-mark">TG</div>
+      <a href="index.html" style="font-weight:800">TastyGrid</a>
+    </div>
+    <nav style="display:flex;gap:8px;align-items:center">
+      <a class="icon-btn" href="index.html" style="padding:8px 10px;border-radius:10px">Home</a>
+      <a class="icon-btn" href="about_us.html" style="padding:8px 10px;border-radius:10px">About</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="card" aria-labelledby="fbTitle">
+      <h1 id="fbTitle" style="margin:0 0 8px 0">Send Feedback</h1>
+      <p class="small" style="margin:0 0 12px">We love bug reports, recipe suggestions, and new recipe submissions. Your feedback helps improve the site.</p>
+
+      <div class="form-row">
+        <form id="feedbackForm" class="card" style="padding:12px" aria-label="Feedback form">
+          <div class="field"><label>Name (optional)</label><input class="input" id="name" placeholder="Your name"></div>
+          <div class="field"><label>Email (optional)</label><input class="input" id="email" type="email" placeholder="you@example.com"></div>
+          <div class="field"><label>Type</label>
+            <select id="type" class="input">
+              <option value="bug">Bug report</option>
+              <option value="suggestion">Suggestion</option>
+              <option value="recipe">Submit recipe</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="field"><label>Message</label><textarea id="message" rows="6" placeholder="Describe your feedback" required class="input"></textarea></div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button class="primary" type="submit">Send feedback</button>
+            <button type="button" id="clearBtn" class="icon-btn">Clear</button>
+          </div>
+          <p class="small" style="margin-top:8px">We’ll not publish your email without permission — this is to follow up if needed.</p>
+        </form>
+
+        <aside class="card">
+          <h3 style="margin-top:0">Quick tips</h3>
+          <ul style="color:var(--muted);margin-left:18px">
+            <li>For recipe submissions: include ingredient list, steps, prep/cook times and a slug-friendly title.</li>
+            <li>For bugs: mention browser/device and steps to reproduce.</li>
+            <li>Want to contribute code or designs? Add your GitHub link in the message.</li>
+          </ul>
+
+          <div style="margin-top:12px" class="success" id="statusBox" hidden>
+            Thanks — your message was saved locally. (This demo stores feedback in localStorage.)
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer style="margin-top:14px;color:var(--muted);font-size:0.9rem">TastyGrid — feedback helps us improve. © <span id="yr2"></span></footer>
+</div>
+
+<script>
+/* simple local demo: stores feedback in localStorage */
+const form = document.getElementById('feedbackForm');
+const statusBox = document.getElementById('statusBox');
+form.addEventListener('submit', e=>{
+  e.preventDefault();
+  const payload = {
+    id: 'fb-' + Date.now(),
+    name: document.getElementById('name').value || null,
+    email: document.getElementById('email').value || null,
+    type: document.getElementById('type').value,
+    message: document.getElementById('message').value,
+    createdAt: new Date().toISOString()
+  };
+  const all = JSON.parse(localStorage.getItem('tastygrid_feedback')||'[]');
+  all.push(payload);
+  localStorage.setItem('tastygrid_feedback', JSON.stringify(all));
+  statusBox.hidden = false;
+  setTimeout(()=> statusBox.hidden = true, 4000);
+  form.reset();
+});
+document.getElementById('clearBtn').addEventListener('click', ()=> form.reset());
+document.getElementById('yr2').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

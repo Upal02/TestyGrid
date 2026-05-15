@@ -1,0 +1,963 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TastyGrid — All Recipes (Modern Vibrant)</title>
+  <meta name="description"
+    content="TastyGrid — share tested home recipes, preserve family flavors, and make cooking simple and joyful for everyone." />
+  <style>
+    /* Modern Vibrant single-file styles (same as previous theme) */
+    :root {
+      --bg: #f4f7ff;
+      --card: #fff;
+      --muted: #52606d;
+      --text: #071428;
+      --accent: #ff6b6b;
+      --accent2: #7c3aed;
+      --header-bg: linear-gradient(90deg, rgba(124, 58, 237, 0.12), rgba(255, 107, 107, 0.08));
+      --sidebar-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.95));
+      --main-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.6), transparent);
+      --shadow: 0 16px 40px rgba(12, 18, 30, 0.08);
+      --radius: 12px;
+      --trans: 220ms cubic-bezier(.2, .9, .3, 1);
+      --maxw: 1200px;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none
+    }
+
+    .container {
+      max-width: calc(var(--maxw) + 160px);
+      margin: 0 auto;
+      padding: 18px
+    }
+
+    /* header row */
+    .header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      background: var(--header-bg);
+      padding: 10px;
+      border-radius: 12px;
+      box-shadow: var(--shadow)
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px
+    }
+
+    .logo-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: inline-grid;
+      place-items: center;
+      font-weight: 800;
+      color: white;
+      font-size: 16px
+    }
+
+    .brand a {
+      font-weight: 900;
+      font-size: 1.25rem;
+      padding: 6px 8px;
+      border-radius: 8px;
+      position: relative
+    }
+
+    .brand a .shimmer {
+      background: linear-gradient(90deg, var(--accent), var(--accent2), #fff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      animation: shimmer 3.2s linear infinite;
+      background-size: 200% 100%
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0
+      }
+
+      100% {
+        background-position: -200% 0
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .brand a .shimmer {
+        animation: none;
+        color: var(--text)
+      }
+    }
+
+    /* header center */
+    .header-center {
+      display: flex;
+      gap: 12px;
+      align-items: center
+    }
+
+    /* header right / search */
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 320px;
+      max-width: 520px;
+      width: 38%
+    }
+
+    .search {
+      position: relative;
+      width: 100%
+    }
+
+    .search input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      background: var(--card)
+    }
+
+    .suggestions {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 8px);
+      background: var(--card);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      max-height: 320px;
+      overflow: auto;
+      z-index: 90;
+      display: none
+    }
+
+    .suggestions[aria-hidden="false"] {
+      display: block
+    }
+
+    .suggest {
+      display: flex;
+      gap: 12px;
+      padding: 10px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+      align-items: center;
+      cursor: pointer
+    }
+
+    .suggest img {
+      width: 64px;
+      height: 48px;
+      border-radius: 8px;
+      object-fit: cover
+    }
+
+    .suggest h4 {
+      margin: 0;
+      font-size: 0.95rem
+    }
+
+    .suggest p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.85rem
+    }
+
+    /* row 2 layout */
+    .row2 {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 18px;
+      align-items: start;
+      margin-top: 14px
+    }
+
+    @media (max-width:1000px) {
+      .row2 {
+        grid-template-columns: 260px 1fr
+      }
+    }
+
+    @media (max-width:900px) {
+      .row2 {
+        grid-template-columns: 1fr
+      }
+    }
+
+    /* sidebar */
+    .sidebar {
+      background: var(--sidebar-bg);
+      padding: 14px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      height: calc(100vh - 220px);
+      overflow: auto;
+      position: sticky;
+      top: 18px
+    }
+
+    .sidebar h3 {
+      margin: 0 0 10px 0;
+      color: var(--text)
+    }
+
+    .cat-list label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px;
+      border-radius: 8px;
+      cursor: pointer
+    }
+
+    .cat-list label:hover {
+      background: rgba(0, 0, 0, 0.03)
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap
+    }
+
+    .chip {
+      padding: 6px 8px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.03)
+    }
+
+    .chip.active {
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      color: white
+    }
+
+    /* main content */
+    .content {
+      padding: 6px 0;
+      background: var(--main-bg);
+      border-radius: 12px
+    }
+
+    .category {
+      margin-bottom: 28px
+    }
+
+    .category h2 {
+      font-size: 1.05rem;
+      margin: 0 0 10px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text)
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px
+    }
+
+    @media (min-width:1200px) {
+      .grid {
+        grid-template-columns: repeat(4, 1fr)
+      }
+    }
+
+    @media (min-width:900px) and (max-width:1199px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr)
+      }
+    }
+
+    @media (min-width:600px) and (max-width:899px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+    }
+
+    @media (max-width:599px) {
+      .grid {
+        grid-template-columns: 1fr
+      }
+    }
+
+    /* card */
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      transition: transform var(--trans), box-shadow var(--trans)
+    }
+
+    .card:focus-within,
+    .card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 28px 80px rgba(12, 18, 30, 0.15)
+    }
+
+    .media {
+      height: 160px;
+      overflow: hidden;
+      position: relative;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.02), transparent)
+    }
+
+    .media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 300ms
+    }
+
+    .overlay {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 10px;
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0.6), transparent);
+      color: white;
+      transform: translateY(100%);
+      opacity: 0;
+      transition: transform var(--trans), opacity var(--trans)
+    }
+
+    .card:hover .overlay,
+    .card:focus-within .overlay {
+      transform: translateY(0);
+      opacity: 1
+    }
+
+    .card:hover img {
+      transform: scale(1.06)
+    }
+
+    .body {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px
+    }
+
+    .body h3 {
+      margin: 0;
+      font-size: 1rem
+    }
+
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.9rem
+    }
+
+    /* utilities */
+    .icon-btn {
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: var(--card);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      box-shadow: var(--shadow)
+    }
+
+    [tabindex]:focus {
+      outline: 3px solid rgba(124, 58, 237, 0.12);
+      outline-offset: 2px
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      :root {
+        --trans: 1ms
+      }
+
+      .card,
+      .overlay,
+      .media img {
+        transition: none !important
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container" id="app">
+
+    <!-- ROW 1 -->
+    <div class="header-row" role="banner">
+      <div class="header-left">
+        <div class="brand" role="img" aria-label="TastyGrid">
+          <div class="logo-mark" style="background:linear-gradient(135deg,var(--accent),var(--accent2))">TG</div>
+          <a href="index.html"><span class="shimmer">TastyGrid</span></a>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <a class="icon-btn" href="about_us.html">About Us</a>
+        <a class="icon-btn" href="feedback.html">Feedback</a>
+      </div>
+
+      <div class="header-right">
+        <div class="search" id="searchWrap">
+          <input id="searchInput" type="search" placeholder="Search recipes, ingredients, tags..."
+            aria-label="Search recipes" autocomplete="off">
+          <div id="suggestions" class="suggestions" aria-hidden="true" role="listbox" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 2 -->
+    <div class="row2" role="main">
+
+      <aside class="sidebar" aria-label="Categories and filters">
+        <h3>Categories</h3>
+        <div id="categoryList" class="cat-list" role="list"></div>
+
+        <hr style="margin:12px 0;border:none;border-top:1px solid rgba(0,0,0,0.04)">
+
+        <h3>Filters</h3>
+        <div style="margin-bottom:8px">
+          <label style="display:flex;gap:8px;align-items:center"><input name="veg" type="radio" value="all"
+              checked>All</label>
+          <label style="display:flex;gap:8px;align-items:center"><input name="veg" type="radio" value="veg">Veg</label>
+          <label style="display:flex;gap:8px;align-items:center"><input name="veg" type="radio"
+              value="nonveg">Non-Veg</label>
+        </div>
+
+        <div style="margin-bottom:8px">
+          <strong>Rating</strong>
+          <div class="chips" style="margin-top:6px">
+            <button class="chip" data-rating="5">5★</button>
+            <button class="chip" data-rating="4">4★+</button>
+            <button class="chip" data-rating="4.5">4.5★+</button>
+            <button class="chip" data-rating="3.5">3.5★+</button>
+            <button class="chip" data-rating="3">3★+</button>
+          </div>
+        </div>
+
+        <div style="margin-top:8px">
+          <button id="clearFilters" class="icon-btn">Clear all</button>
+        </div>
+      </aside>
+
+      <section class="content" id="contentArea" aria-live="polite"></section>
+
+    </div>
+
+    <footer style="margin-top:18px;color:var(--muted);font-size:0.9rem">TastyGrid — All recipes shown. Click a card to
+      open the recipe page (slug.html).</footer>
+  </div>
+
+  <script>
+    /* Helpers */
+    function escapeHtml(s) { return String(s).replace(/[&<>'"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": "&#39;", '"': '&quot;' })[c]); }
+    function svgPlaceholder(title, w = 1400, h = 900) {
+      const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${w}' height='${h}' viewBox='0 0 ${w} ${h}'>
+    <defs><linearGradient id='g' x1='0' x2='1'><stop offset='0' stop-color='#ffb347'/><stop offset='1' stop-color='#7c3aed'/></linearGradient></defs>
+    <rect width='100%' height='100%' fill='url(#g)'/>
+    <text x='50%' y='50%' font-size='48' text-anchor='middle' fill='rgba(255,255,255,0.95)' font-family='sans-serif' dy='.3em'>${escapeHtml(title)}</text>
+  </svg>`;
+      return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    }
+    function debounce(fn, ms = 200) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+    function groupBy(list, key) { return list.reduce((acc, item) => { (acc[item[key]] = acc[item[key]] || []).push(item); return acc; }, {}); }
+    // Safe filename generator: "Vada Pav!" -> "vada-pav.html"
+    function filenameFromSlug(slug) {
+      if (!slug) return 'recipe.html';
+      const s = String(slug).trim().toLowerCase();
+      const normalized = s
+        .replace(/\s+/g, '-')        // spaces -> dashes
+        .normalize('NFKD')          // decompose accents
+        .replace(/[^a-z0-9\-]/g, '') // remove other chars
+        .replace(/\-+/g, '-')        // collapse dashes
+        .replace(/^\-+|\-+$/g, '');  // trim dashes
+      return (normalized || 'recipe') + '.html';
+    }
+
+    /* Full recipes array (all entries you provided) */
+    const recipes = [
+      /* NORTH INDIAN */
+      {
+        id: "chole-bhature", slug: "chole-bhature", title: "Chole Bhature (Punjabi)", category: "North Indian", rating: 4.5, isVeg: true,
+        image: "Image/North Indian/Chole Bhature.webp",
+        shortDescription: "Spicy chickpea curry with puffy bhature.",
+        ingredients: [
+          "1½ cups dried chickpeas (kabuli chana), soaked 8–10 hours", "1 tea bag (optional — for color)", "2 bay leaves, 1 black cardamom", "1 tsp cumin seeds",
+          "2 medium onions, finely chopped", "3 medium tomatoes, pureed", "1 tbsp ginger-garlic paste", "1–2 green chilies, slit",
+          "1½ tbsp chole/chana masala", "1 tsp turmeric powder, 1 tsp red chili powder", "1 tsp garam masala", "Salt to taste", "3 tbsp oil or ghee", "Fresh coriander leaves, lemon wedges (for garnish)"
+        ],
+        steps: [
+          "Soak & cook chickpeas in pressure cooker with tea bag (optional), bay leaf and cardamom.", "Sauté onions until deep golden, add ginger-garlic paste.", "Add tomato puree and spices; cook until oil separates.", "Add chickpeas and simmer 20–25 minutes; mash a few to thicken.", "Finish with garam masala; garnish."
+        ],
+        prepTime: "15–20 min (+soak)", cookTime: "40–50 min", servings: 4, tags: ["chickpeas", "punjabi"], createdAt: "2025-11-28"
+      },
+      {
+        id: "dal-makhani", slug: "dal-makhani", title: "Dal Makhani", category: "North Indian", rating: 4.5, isVeg: true,
+        image: "Image/North Indian/Dal Makhani.jpeg",
+        shortDescription: "Creamy slow-simmered urad dal & rajma, rich with butter and cream.",
+        ingredients: ["1 cup whole black urad dal (soaked overnight)", "¼ cup rajma (soaked)", "3–4 cups water", "3 tbsp butter + 2 tbsp oil", "2 onions finely chopped", "2 tbsp ginger-garlic paste", "3 medium tomatoes pureed", "spices", "cream"],
+        steps: ["Pressure cook dal & rajma until very soft.", "Sauté onions slowly, add ginger-garlic and tomato puree.", "Combine cooked dal with masala and simmer slowly for best flavor.", "Layer butter and cream while simmering; finish with kasuri methi."],
+        prepTime: "15 min (+soak)", cookTime: "45–60 min", servings: 4, tags: ["lentils", "comfort"], createdAt: "2025-11-27"
+      },
+      {
+        id: "rajma-masala", slug: "rajma-masala", title: "Rajma Masala (Rajma Chawal)", category: "North Indian", rating: 4.6, isVeg: true,
+        image: "Image/North Indian/Rajma Masala (Rajma Chawal).jpeg",
+        shortDescription: "Kidney beans in spiced onion-tomato gravy — perfect with rice.",
+        ingredients: ["1½ cups rajma (soaked)", "2 onions, chopped", "2 tomatoes, pureed", "1 tbsp ginger-garlic paste", "spices", "3 tbsp oil/ghee", "fresh coriander"],
+        steps: ["Pressure cook rajma until soft.", "Sauté onions, add ginger-garlic and tomato puree.", "Add spices and cooked rajma, simmer to thicken.", "Mash some beans to thicken body; garnish and serve with rice."],
+        prepTime: "10–15 min (+soak)", cookTime: "30–40 min", servings: 4, tags: ["kidney-beans"], createdAt: "2025-11-26"
+      },
+      {
+        id: "butter-chicken", slug: "butter-chicken", title: "Butter Chicken", category: "North Indian", rating: 4.8, isVeg: false,
+        image: "Image/North Indian/Butter Chicken.jpg",
+        shortDescription: "Marinated chicken in a rich tomato-cashew cream gravy.",
+        ingredients: ["700 g boneless chicken", "1 cup yogurt", "ginger-garlic paste", "spices for marinade", "tomato-cashew puree", "butter", "cream", "kasuri methi"],
+        steps: ["Marinate chicken for 2–4 hours.", "Grill or sear chicken for slight char.", "Make tomato-cashew puree and cook until oil separates.", "Add cream and chicken; simmer and finish with kasuri methi."],
+        prepTime: "20–30 min (+marination)", cookTime: "25–30 min", servings: 4, tags: ["chicken", "dinner"], createdAt: "2025-11-25"
+      },
+      {
+        id: "palak-paneer", slug: "palak-paneer", title: "Palak Paneer", category: "North Indian", rating: 4.5, isVeg: true,
+        image: "Image/North Indian/Palak Paneer.jpg",
+        shortDescription: "Spinach puree curry with paneer cubes — nutritious and creamy.",
+        ingredients: ["300–350 g spinach", "200–250 g paneer", "onion, tomato, ginger-garlic paste", "green chilies (optional)", "cream (optional)", "garam masala"],
+        steps: ["Blanch spinach and puree.", "Sauté onions, tomatoes and spices.", "Add spinach puree and simmer, add paneer and cream before finishing."],
+        prepTime: "10–15 min", cookTime: "15–20 min", servings: 4, tags: ["spinach", "paneer"], createdAt: "2025-11-24"
+      },
+      {
+        id: "aloo-paratha", slug: "aloo-paratha", title: "Aloo Paratha", category: "North Indian", rating: 4.7, isVeg: true,
+        image: "Image/North Indian/Aloo Paratha.jpeg",
+        shortDescription: "Stuffed whole-wheat parathas with spiced potato filling.",
+        ingredients: ["2 cups whole wheat flour", "4 potatoes mashed", "green chilies", "coriander", "cumin powder", "amchur", "ghee or oil"],
+        steps: ["Prepare dough and rest.", "Make potato stuffing with spices and keep relatively dry.", "Stuff, roll and cook parathas on tawa with ghee."],
+        prepTime: "20 min", cookTime: "20–25 min", servings: 6, tags: ["bread", "breakfast"], createdAt: "2025-11-23"
+      },
+      {
+        id: "chole", slug: "chole", title: "Chole (Standalone)", category: "North Indian", rating: 4.5, isVeg: true,
+        image: "Image/North Indian/Chole Masala.jpg",
+        shortDescription: "Hearty chickpea curry — everyday comfort food.",
+        ingredients: ["Same as Chole Bhature's chole list"],
+        steps: ["Follow chole steps from Chole Bhature section; serve with rice, roti or bhature."],
+        prepTime: "15–20 min (+soak)", cookTime: "35–45 min", servings: 4, tags: ["chole", "comfort"], createdAt: "2025-11-22"
+      },
+
+      /* SOUTH INDIAN */
+      {
+        id: "masala-dosa", slug: "masala-dosa", title: "Masala Dosa", category: "South Indian", rating: 4.8, isVeg: true,
+        image: "Image/South Indian recipes/Masala Dosa.jpg",
+        shortDescription: "Crisp fermented rice-urad dosa filled with potato masala.",
+        ingredients: ["Rice & urad dal batter (fermented)", "potato masala: potatoes, mustard seeds, curry leaves, onion, green chilies"],
+        steps: ["Prepare and ferment batter.", "Make potato masala with tempering and spices.", "Spread dosa thin on tawa and fill with potato masala."],
+        prepTime: "6–12 hrs (batter + ferment)", cookTime: "20–30 min", servings: 8, tags: ["dosa", "breakfast"], createdAt: "2025-11-20"
+      },
+      {
+        id: "idli-sambar", slug: "idli-sambar", title: "Idli with Sambar", category: "South Indian", rating: 4.5, isVeg: true,
+        image: "Image/South Indian recipes/Idli with Sambar.jpg",
+        shortDescription: "Steam idlis served with sambar and coconut chutney.",
+        ingredients: ["Idli batter", "Sambar: toor dal, vegetables, tamarind, sambar powder", "coconut chutney ingredients"],
+        steps: ["Steam idlis until done.", "Prepare sambar and coconut chutney.", "Serve idlis hot with sambar and chutney."],
+        prepTime: "6–12 hrs (batter + ferment)", cookTime: "10–12 min steam + sambar", servings: 4, tags: ["idli", "sambar"], createdAt: "2025-11-19"
+      },
+      {
+        id: "sambar-standalone", slug: "sambar-standalone", title: "Sambar (standalone)", category: "South Indian", rating: 4.5, isVeg: true,
+        image: "Image/South Indian recipes/Sambar (standalone).jpg",
+        shortDescription: "Lentil & vegetable stew with tamarind — many regional variants.",
+        ingredients: ["Toor dal", "seasonal vegetables", "tamarind pulp", "sambar powder", "tempering ingredients"],
+        steps: ["Cook dal thoroughly.", "Cook vegetables with tamarind and sambar powder, combine with dal and finish with tempering."],
+        prepTime: "10–15 min", cookTime: "20–30 min", servings: 4, tags: ["sambar"], createdAt: "2025-11-18"
+      },
+      {
+        id: "chicken-chettinad", slug: "chicken-chettinad", title: "Chicken Chettinad", category: "South Indian", rating: 4.6, isVeg: false,
+        image: "Image/South Indian recipes/Chicken Chettinad.jpg",
+        shortDescription: "Bold, roasted-spice Chettinad chicken with depth and heat.",
+        ingredients: ["700 g chicken", "chettinad masala (roasted & ground)", "onions, tomatoes, ginger-garlic paste", "curry leaves"],
+        steps: ["Roast spices and coconut, grind to paste.", "Sauté onions & tomatoes, add masala and chicken, simmer until cooked."],
+        prepTime: "20–30 min", cookTime: "30–40 min", servings: 4, tags: ["chettinad", "spicy"], createdAt: "2025-11-17"
+      },
+      {
+        id: "hyderabadi-biryani", slug: "hyderabadi-biryani", title: "Hyderabadi Biryani", category: "South Indian", rating: 4.6, isVeg: false,
+        image: "Image/South Indian recipes/Hyderabadi Biryani.jpg",
+        shortDescription: "Aromatic layered biryani using the dum technique with saffron and fried onions.",
+        ingredients: ["Basmati rice", "marinated chicken/mutton", "fried onions (birista), saffron, mint, coriander, ghee, whole spices"],
+        steps: ["Parboil rice to 70% done.", "Layer meat and rice with fried onions and saffron milk.", "Seal and cook on low heat (dum) 30–45 minutes."],
+        prepTime: "1–8 hrs (marination)", cookTime: "60–75 min", servings: 4, tags: ["biryani"], createdAt: "2025-11-16"
+      },
+      {
+        id: "coconut-chutney", slug: "coconut-chutney", title: "Coconut Chutney", category: "South Indian", rating: 4.5, isVeg: true,
+        image: "Image/South Indian recipes/Coconut Chutney.jpg",
+        shortDescription: "Fresh coconut chutney — best with dosa & idli.",
+        ingredients: ["Grated coconut", "roasted chana dal", "green chilies, ginger, salt", "tempering: mustard seeds & curry leaves"],
+        steps: ["Blend coconut, chana dal and spices to a smooth paste.", "Temper mustard seeds and curry leaves and pour over chutney."],
+        prepTime: "5–10 min", cookTime: "0 min", servings: 4, tags: ["chutney"], createdAt: "2025-11-15"
+      },
+      {
+        id: "upma", slug: "upma", title: "Upma", category: "South Indian", rating: 4.4, isVeg: true,
+        image: "Image/South Indian recipes/Upma.jpg",
+        shortDescription: "Quick semolina breakfast flavored with mustard seeds and curry leaves.",
+        ingredients: ["1 cup rava (semolina)", "mustard seeds, urad dal, curry leaves", "onion, green chilies, vegetables optional", "2½ cups water"],
+        steps: ["Roast rava lightly.", "Temper seeds and onion, add boiling water and stir in rava to avoid lumps.", "Finish with lemon and coriander."],
+        prepTime: "5–10 min", cookTime: "10–12 min", servings: 2, tags: ["breakfast"], createdAt: "2025-11-14"
+      },
+
+      /* NORTH-EAST INDIAN */
+      {
+        id: "assamese-fish-curry", slug: "assamese-fish-curry", title: "Assamese Fish Curry (Masor Tenga)", category: "North-East Indian", rating: 4.4, isVeg: false,
+        image: "Image/North-East Indian recipes/Assamese Fish Curry (Masor Tenga).jpg",
+        shortDescription: "Light, tangy fish curry using tomato or lemon as the souring agent.",
+        ingredients: ["600 g river fish (rohu)", "2–3 medium tomatoes or lemon juice", "1 tsp turmeric", "mustard oil", "green chilies, coriander"],
+        steps: ["Marinate fish in turmeric & salt, shallow fry.", "Make tangy tomato or lemon sauce, simmer fish gently in sauce to avoid breaking."],
+        prepTime: "10–15 min", cookTime: "15–20 min", servings: 3, tags: ["fish", "tangy"], createdAt: "2025-11-13"
+      },
+      {
+        id: "momos", slug: "momos", title: "Momos", category: "North-East Indian", rating: 4.5, isVeg: false,
+        image: "Image/North-East Indian recipes/Momos.jpg",
+        shortDescription: "Steamed dumplings with veg or chicken filling, served with spicy chutney.",
+        ingredients: ["3 cups flour for dough", "veg filling: cabbage, carrot, onion, garlic, ginger", "chicken filling: minced chicken, onion, ginger, soy sauce"],
+        steps: ["Knead dough and rest.", "Prepare filling and shape momos, pleat edges.", "Steam 10–12 minutes; serve with tomato-garlic chutney."],
+        prepTime: "30–40 min", cookTime: "10–12 min", servings: 30, tags: ["dumplings"], createdAt: "2025-11-12"
+      },
+
+      /* INDO-CHINESE */
+      {
+        id: "chicken-manchurian", slug: "chicken-manchurian", title: "Chicken Manchurian", category: "Indo-Chinese", rating: 4.5, isVeg: false,
+        image: "Image/Indo-Chinese recipes/Chicken Manchurian.jpg",
+        shortDescription: "Crispy fried chicken tossed in a sweet-spicy Manchurian sauce.",
+        ingredients: ["500 g boneless chicken", "marinade: soy, cornflour, maida, ginger-garlic", "sauce: garlic, ginger, spring onion, ketchup, chili sauce, soy sauce, vinegar"],
+        steps: ["Marinate and fry chicken.", "Prepare sauce and thicken with cornflour slurry.", "Toss chicken in sauce and finish with spring onion greens."],
+        prepTime: "20 min", cookTime: "20–25 min", servings: 4, tags: ["chicken"], createdAt: "2025-11-11"
+      },
+      {
+        id: "veg-hakka-noodles", slug: "veg-hakka-noodles", title: "Veg Hakka Noodles", category: "Indo-Chinese", rating: 4.5, isVeg: true,
+        image: "Image/Indo-Chinese recipes/Veg Hakka Noodles.jpg",
+        shortDescription: "Stir-fried noodles with crisp vegetables and savory sauce.",
+        ingredients: ["Hakka noodles", "garlic, carrot, capsicum, cabbage, spring onions", "soy sauce, vinegar, pepper"],
+        steps: ["Boil noodles al dente and cool.", "Stir-fry veg on high heat, add sauces and toss noodles quickly."],
+        prepTime: "10 min", cookTime: "8–10 min", servings: 3, tags: ["noodles"], createdAt: "2025-11-10"
+      },
+      {
+        id: "chili-paneer", slug: "chili-paneer", title: "Chili Paneer (Dry)", category: "Indo-Chinese", rating: 4.5, isVeg: true,
+        image: "Image/Indo-Chinese recipes/Chili Paneer (Dry).jpg",
+        shortDescription: "Crisp paneer cubes coated in a sticky chili-soy glaze.",
+        ingredients: ["400 g paneer", "coating: cornflour + maida", "sauce: garlic, ginger, onion, capsicum, soy, chili sauce, vinegar"],
+        steps: ["Coat and shallow-fry paneer until golden.", "Sauté aromatics and veg, add sauces and slurry, toss paneer to coat."],
+        prepTime: "15 min", cookTime: "12–15 min", servings: 3, tags: ["paneer"], createdAt: "2025-11-09"
+      },
+      {
+        id: "fried-rice", slug: "fried-rice", title: "Fried Rice (Indo-Chinese)", category: "Indo-Chinese", rating: 4.5, isVeg: true,
+        image: "Image/Indo-Chinese recipes/Fried Rice (Indo-Chinese).jpg",
+        shortDescription: "Wok-fried rice with mixed vegetables and savory seasonings.",
+        ingredients: ["3 cups cooked cooled rice", "oil, garlic, mixed vegetables", "soy sauce, vinegar, spring onions"],
+        steps: ["Sauté aromatics, cook veg, add rice and sauces, toss on high heat until slightly toasted."],
+        prepTime: "10 min", cookTime: "8–10 min", servings: 3, tags: ["rice"], createdAt: "2025-11-08"
+      },
+      {
+        id: "chili-chicken", slug: "chili-chicken", title: "Chili Chicken", category: "Indo-Chinese", rating: 4.5, isVeg: false,
+        image: "Image/Indo-Chinese recipes/Chili Chicken.jpg",
+        shortDescription: "Spicy-sweet chicken with peppers in a glossy sauce.",
+        ingredients: ["500 g boneless chicken", "marinade: soy, cornflour, egg optional", "sauce: garlic, ginger, capsicum, chili sauce, soy, vinegar"],
+        steps: ["Marinate and fry chicken until crisp.", "Prepare sauce and toss chicken to coat."],
+        prepTime: "20 min", cookTime: "20 min", servings: 4, tags: ["chicken"], createdAt: "2025-11-07"
+      },
+      {
+        id: "sweet-corn-soup", slug: "sweet-corn-soup", title: "Sweet Corn Soup", category: "Indo-Chinese soups", rating: 4.3, isVeg: true,
+        image: "Image/Indo-Chinese recipes/Sweet-corn-soup-1-1.jpg.webp",
+        shortDescription: "Comforting sweet corn soup with optional egg ribbons.",
+        ingredients: ["Stock, sweet corn, carrot", "cornflour slurry, soy sauce, egg optional", "spring onion for garnish"],
+        steps: ["Simmer stock with vegetables and corn.", "Add slurry to thicken and add egg ribbons if desired."],
+        prepTime: "8 min", cookTime: "12 min", servings: 4, tags: ["soup"], createdAt: "2025-11-06"
+      },
+      {
+        id: "hot-and-sour-soup", slug: "hot-and-sour-soup", title: "Hot & Sour Soup", category: "Indo-Chinese soups", rating: 4.3, isVeg: true,
+        image: "Image/Indo-Chinese recipes/Indo-Chinese soups (Sweet Corn & Hot & Sour).jpg",
+        shortDescription: "Tangy, peppery soup with mushrooms, tofu and bamboo shoots.",
+        ingredients: ["Stock, mixed mushrooms, bamboo shoots, tofu", "soy sauce, vinegar, white pepper", "cornflour slurry"],
+        steps: ["Simmer ingredients, season with soy & vinegar, thicken with slurry, finish with spring onion."],
+        prepTime: "10 min", cookTime: "12 min", servings: 4, tags: ["soup"], createdAt: "2025-11-05"
+      },
+
+      /* INDIAN FAST FOODS / STREET FOODS */
+      {
+        id: "vada-pav", slug: "vada-pav", title: "Vada Pav", category: "Indian fast foods", rating: 4.5, isVeg: true,
+        image: "Image/Indian fast foods - street foods/Vada Pav.png",
+        shortDescription: "Potato fritter served in a buttered pav with chutneys.",
+        ingredients: ["4 potatoes mashed", "1 tsp mustard seeds, curry leaves", "1 cup besan batter", "pav buns, chutneys"],
+        steps: ["Prepare spiced aloo balls, dip in besan batter and deep fry.", "Toast pav with butter, add chutneys and vada, serve."],
+        prepTime: "25 min", cookTime: "20 min", servings: 6, tags: ["street-food"], createdAt: "2025-11-04"
+      },
+      {
+        id: "pani-puri", slug: "pani-puri", title: "Pani Puri / Golgappa", category: "Indian fast foods", rating: 4.5, isVeg: true,
+        image: "Image/Indian fast foods - street foods/Pani Puri _ Golgappa.jpg",
+        shortDescription: "Crisp puris filled with spicy-tangy flavored water and stuffing.",
+        ingredients: ["Ready-made puris or homemade", "pani: mint, coriander, green chilies, tamarind, roasted cumin, black salt", "filling: mashed potatoes, chickpeas, chaat masala"],
+        steps: ["Blend and season pani; prepare filling.", "Crack puri, stuff and dip into chilled pani immediately."],
+        prepTime: "30–40 min", cookTime: "10–15 min", servings: 30, tags: ["chaat", "snack"], createdAt: "2025-11-03"
+      },
+      {
+        id: "pav-bhaji", slug: "pav-bhaji", title: "Pav Bhaji", category: "Indian fast foods", rating: 4.6, isVeg: true,
+        image: "Image/Indian fast foods - street foods/Pav Bhaji.jpg",
+        shortDescription: "Mashed vegetable curry served with buttered pav buns.",
+        ingredients: ["Potatoes, cauliflower, peas, carrot (boiled & mashed)", "onions, tomatoes, pav bhaji masala, butter"],
+        steps: ["Sauté onions & tomato, add spices and mashed veggies, simmer and mash together.", "Toast pav with butter and serve with bhaji."],
+        prepTime: "20 min", cookTime: "30–35 min", servings: 4, tags: ["street-food"], createdAt: "2025-11-02"
+      },
+      {
+        id: "bhel-puri", slug: "bhel-puri", title: "Bhel Puri", category: "Indian fast foods", rating: 4.4, isVeg: true,
+        image: "Image/Indian fast foods - street foods/Bhel Puri.jpg",
+        shortDescription: "Puffed rice chaat tossed with chutneys, onion and sev.",
+        ingredients: ["Puffed rice (murmura)", "onion, tomato, sev, tamarind chutney, green chutney, coriander, lemon"],
+        steps: ["Mix puffed rice with vegetables and chutneys just before serving; top with sev."],
+        prepTime: "10 min", cookTime: "0 min", servings: 4, tags: ["chaat"], createdAt: "2025-11-01"
+      },
+      {
+        id: "aloo-tikki-chaat", slug: "aloo-tikki-chaat", title: "Aloo Tikki Chaat", category: "Indian fast foods", rating: 4.5, isVeg: true,
+        image: "Image/Indian fast foods - street foods/Aloo Tikki Chaat.webp",
+        shortDescription: "Crispy potato patties topped with chickpeas, yogurt and chutneys.",
+        ingredients: ["Potatoes boiled and mashed", "spices, breadcrumbs", "chutneys, yogurt, sev for assembly"],
+        steps: ["Form and shallow-fry potato patties.", "Assemble with chickpeas, yogurt and chutneys; top with sev."],
+        prepTime: "20 min", cookTime: "15–20 min", servings: 4, tags: ["chaat"], createdAt: "2025-10-31"
+      },
+      {
+        id: "kathi-roll", slug: "kathi-roll", title: "Kathi Roll (Kolkata style)", category: "Indian fast foods", rating: 4.4, isVeg: false,
+        image: "Image/Indian fast foods - street foods/Kathi Roll (Kolkata style).jpg",
+        shortDescription: "Paratha rolled with spicy chicken or egg & onions — perfect on the go.",
+        ingredients: ["Paratha or dough", "filling: marinated chicken or egg, sliced onions, green chutney"],
+        steps: ["Cook filling and slightly char for flavor.", "Assemble on paratha with chutney and roll tightly."],
+        prepTime: "20 min", cookTime: "20 min", servings: 4, tags: ["wrap"], createdAt: "2025-10-30"
+      },
+      {
+        id: "samosa", slug: "samosa", title: "Samosa", category: "Indian fast foods", rating: 4.7, isVeg: true,
+        image: "Image/Indian fast foods - street foods/Samosa.jpg",
+        shortDescription: "Crisp triangular pastry stuffed with spiced potato & peas.",
+        ingredients: ["Flour dough", "potato & pea spiced filling", "oil for deep frying"],
+        steps: ["Make dough and filling, shape cones and fill.", "Deep fry until golden and serve with chutneys."],
+        prepTime: "40–50 min", cookTime: "15–20 min", servings: 12, tags: ["snack"], createdAt: "2025-10-29"
+      }
+    ]; // end recipes
+
+    /* state & DOM */
+    const state = { query: '', catFilters: new Set(), veg: 'all', ratingMin: 0, suggestions: [], suggestIndex: -1 };
+    const dom = {
+      categoryList: document.getElementById('categoryList'),
+      contentArea: document.getElementById('contentArea'),
+      searchInput: document.getElementById('searchInput'),
+      suggestions: document.getElementById('suggestions'),
+      clearFilters: null
+    };
+
+    /* pre-render preload */
+    recipes.forEach(r => { if (!r.image) r.image = svgPlaceholder(r.title); const img = new Image(); img.src = r.image; });
+
+    /* Init */
+    renderCategoryList();
+    bindSearch();
+    bindFilters();
+    renderContent();
+
+    /* render categories */
+    function renderCategoryList() {
+      const counts = recipes.reduce((a, r) => { a[r.category] = (a[r.category] || 0) + 1; return a; }, {});
+      const cats = Object.keys(counts).sort((a, b) => a.localeCompare(b));
+      dom.categoryList.innerHTML = '';
+      cats.forEach(cat => {
+        const id = 'cat_' + cat.replace(/\s+/g, '_');
+
+        const label = document.createElement('label'); label.htmlFor = id;
+        const left = document.createElement('div'); left.style.display = 'flex'; left.style.alignItems = 'center';
+        const cb = document.createElement('input'); cb.type = 'checkbox'; cb.id = id; cb.dataset.cat = cat;
+        cb.addEventListener('change', onCategoryToggle);
+        left.appendChild(cb); left.appendChild(document.createTextNode(' ' + cat));
+        const right = document.createElement('div'); right.style.color = 'var(--muted)'; right.textContent = counts[cat];
+        label.appendChild(left); label.appendChild(right);
+        dom.categoryList.appendChild(label);
+      });
+    }
+
+    /* render content grouped by category */
+    function renderContent() {
+      const filtered = applyFilters(recipes);
+      const grouped = groupBy(filtered, 'category');
+      dom.contentArea.innerHTML = '';
+      if (!Object.keys(grouped).length) {
+        dom.contentArea.innerHTML = `<div style="padding:40px;text-align:center"><h2>No recipes match your search. Request via Feedback.</h2></div>`;
+        return;
+      }
+      Object.keys(grouped).sort().forEach(cat => {
+        const section = document.createElement('section'); section.className = 'category';
+        const header = document.createElement('h2'); header.textContent = `${cat} (${grouped[cat].length})`;
+        section.appendChild(header);
+        const grid = document.createElement('div'); grid.className = 'grid';
+        grouped[cat].forEach(r => grid.appendChild(makeCard(r)));
+        section.appendChild(grid);
+        dom.contentArea.appendChild(section);
+      });
+    }
+
+    /* create card (navigates to slug.html on click) */
+    function makeCard(r) {
+      const filename = filenameFromSlug(r.slug || r.title || r.id);
+      // anchor wrapper so it works when JS is disabled and supports right-click/open-in-new-tab
+      const link = document.createElement('a');
+      link.href = filename;
+      link.style.textDecoration = 'none';
+      link.style.color = 'inherit';
+      link.setAttribute('aria-label', r.title + ' recipe page');
+
+      const art = document.createElement('article'); art.className = 'card'; art.tabIndex = 0;
+      art.addEventListener('keydown', (e) => { if (e.key === 'Enter') link.click(); });
+
+      // clicking the article follows link (anchor provides progressive enhancement)
+      art.addEventListener('click', (e) => {
+        if (e.target.tagName.toLowerCase() === 'input') return;
+        location.href = link.href;
+      });
+
+      const media = document.createElement('div'); media.className = 'media';
+      const img = document.createElement('img'); img.src = r.image; img.alt = r.title + ' image'; img.loading = 'lazy';
+      media.appendChild(img);
+      const overlay = document.createElement('div'); overlay.className = 'overlay';
+      overlay.innerHTML = `<strong>${r.title}</strong><div style="font-size:0.85rem">${r.shortDescription}</div>`;
+      media.appendChild(overlay);
+      const body = document.createElement('div'); body.className = 'body';
+      const h3 = document.createElement('h3'); h3.textContent = r.title;
+      const meta = document.createElement('div'); meta.className = 'meta';
+      const left = document.createElement('div'); left.innerHTML = starHtml(r.rating) + ` <span style="color:var(--muted);font-size:0.9rem">${r.rating.toFixed(1)}</span>`;
+      const right = document.createElement('div'); right.style.color = 'var(--muted)'; right.textContent = r.category;
+      meta.appendChild(left); meta.appendChild(right);
+      body.appendChild(h3); body.appendChild(meta);
+      art.appendChild(media); art.appendChild(body);
+
+      link.appendChild(art);
+      return link;
+    }
+
+    function starHtml(n) { const full = Math.round(n); let s = ''; for (let i = 0; i < 5; i++) s += `<span style="display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:4px;background:linear-gradient(90deg,#ffd54a,#ffb347);opacity:${i < full ? 1 : 0.28}"></span>`; return s; }
+
+    /* search & suggestions */
+    function bindSearch() {
+      const input = dom.searchInput;
+      input.addEventListener('input', debounce(onSearchInput, 200));
+      input.addEventListener('keydown', onSearchKey);
+      document.addEventListener('click', e => { if (!e.composedPath().includes(dom.suggestions) && e.target !== input) hideSuggestions(); });
+    }
+    function onSearchInput(e) {
+      state.query = e.target.value;
+      if (!state.query.trim()) { hideSuggestions(); renderContent(); return; }
+      const q = state.query.trim().toLowerCase();
+      const tokens = q.split(/\s+/);
+      const scored = recipes.map(r => {
+        const hay = `${r.title} ${(r.tags || []).join(' ')} ${(r.ingredients || []).join(' ')} ${r.category}`.toLowerCase();
+        let score = 0; for (const t of tokens) if (hay.includes(t)) score += 1 + (r.title.toLowerCase().includes(t) ? 2 : 0);
+        return { r, score };
+      }).filter(x => x.score > 0).sort((a, b) => b.score - a.score).slice(0, 8).map(x => x.r);
+      state.suggestions = scored;
+      renderSuggestions(scored);
+      renderContent();
+    }
+    function renderSuggestions(list) {
+      dom.suggestions.innerHTML = ''; if (!list.length) { hideSuggestions(); return; }
+      dom.suggestions.setAttribute('aria-hidden', 'false');
+      list.forEach(r => {
+        const a = document.createElement('a');
+        a.className = 'suggest';
+        a.tabIndex = 0;
+        a.href = filenameFromSlug(r.slug || r.title || r.id);
+        a.innerHTML = `<img src="${r.image}" alt="${r.title} thumb"><div><h4>${r.title}</h4><p>${r.category} · ${r.rating.toFixed(1)}★</p></div>`;
+        // optional: open in new tab: a.target = '_blank';
+        dom.suggestions.appendChild(a);
+      });
+      state.suggestIndex = -1;
+    }
+
+    function hideSuggestions() { dom.suggestions.innerHTML = ''; dom.suggestions.setAttribute('aria-hidden', 'true'); state.suggestions = []; state.suggestIndex = -1; }
+    function onSearchKey(e) {
+      const items = dom.suggestions.querySelectorAll('.suggest');
+      if (!items.length) return;
+      if (e.key === 'ArrowDown') { e.preventDefault(); state.suggestIndex = Math.min(state.suggestIndex + 1, items.length - 1); focusSuggest(items); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); state.suggestIndex = Math.max(state.suggestIndex - 1, 0); focusSuggest(items); }
+      else if (e.key === 'Enter') { e.preventDefault(); if (state.suggestIndex >= 0) items[state.suggestIndex].click(); else if (state.suggestions[0]) location.href = state.suggestions[0].slug + '.html'; }
+      else if (e.key === 'Escape') { hideSuggestions(); dom.searchInput.blur(); }
+    }
+    function focusSuggest(items) { items.forEach((it, i) => it.classList.toggle('focused', i === state.suggestIndex)); if (state.suggestIndex >= 0) items[state.suggestIndex].focus(); }
+
+    /* filters */
+    function applyFilters(list) {
+      const q = state.query.trim().toLowerCase();
+      return list.filter(r => {
+        if (state.catFilters.size > 0 && !state.catFilters.has(r.category)) return false;
+        if (state.veg === 'veg' && !r.isVeg) return false;
+        if (state.veg === 'nonveg' && r.isVeg) return false;
+        if (state.ratingMin && r.rating < state.ratingMin) return false;
+        if (q) {
+          const hay = `${r.title} ${r.category} ${(r.tags || []).join(' ')} ${(r.ingredients || []).join(' ')}`.toLowerCase();
+          const tokens = q.split(/\s+/).filter(Boolean);
+          for (const t of tokens) if (!hay.includes(t)) return false;
+        }
+        return true;
+      });
+    }
+    function onCategoryToggle(e) { const cat = e.target.dataset.cat; if (e.target.checked) state.catFilters.add(cat); else state.catFilters.delete(cat); renderContent(); }
+    function bindFilters() {
+      document.querySelectorAll('.chip[data-rating]').forEach(ch => {
+        ch.addEventListener('click', ev => {
+          const v = Number(ev.currentTarget.dataset.rating);
+          if (state.ratingMin === v) { state.ratingMin = 0; ev.currentTarget.classList.remove('active'); } else {
+            state.ratingMin = v; document.querySelectorAll('.chip[data-rating]').forEach(c => c.classList.remove('active')); ev.currentTarget.classList.add('active');
+          }
+          renderContent();
+        });
+      });
+      Array.from(document.getElementsByName('veg')).forEach(r => r.addEventListener('change', () => { state.veg = document.querySelector('[name="veg"]:checked').value; renderContent(); }));
+      const clearBtn = document.getElementById('clearFilters');
+      if (clearBtn) clearBtn.addEventListener('click', () => {
+        state.catFilters.clear(); state.veg = 'all'; state.ratingMin = 0; state.query = '';
+        document.getElementById('searchInput').value = '';
+        document.querySelectorAll('#categoryList input[type="checkbox"]').forEach(cb => cb.checked = false);
+        document.querySelectorAll('[name="veg"]').forEach(r => r.checked = r.value === 'all');
+        document.querySelectorAll('.chip[data-rating]').forEach(c => c.classList.remove('active'));
+        hideSuggestions(); renderContent();
+      });
+    }
+
+    /* initial helpers */
+    function debounce(fn, ms = 200) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+
+    /* initial render */
+    function renderAll() { renderContent(); }
+    renderAll();
+  </script>
+</body>
+
+</html>

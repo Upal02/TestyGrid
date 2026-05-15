@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Dal Makhani — TastyGrid</title>
+<meta name="description" content="Dal Makhani — Creamy slow-simmered urad dal & rajma, rich with butter and cream." />
+<style>
+  :root{
+    --bg: linear-gradient(180deg,#f6f8ff 0%,#f0f6ff 50%,#eef8ff 100%);
+    --card:#ffffff;
+    --muted:#52606d;
+    --text:#071428;
+    --accent:#ff6b6b;
+    --accent2:#7c3aed;
+    --shadow-lg: 0 28px 80px rgba(8,12,20,0.12);
+    --shadow-md: 0 12px 30px rgba(8,12,20,0.08);
+    --radius:14px;
+    --gap:22px;
+    --maxw:1120px;
+    --trans:260ms cubic-bezier(.2,.9,.3,1);
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+
+  /* page container */
+  .page{max-width:var(--maxw);margin:28px auto;padding:18px;display:grid;gap:var(--gap)}
+
+  /* shimmer */
+  @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+  .brand-shimmer{background:linear-gradient(90deg,var(--accent),var(--accent2),#fff);background-clip:text;-webkit-background-clip:text;color:transparent;animation:shimmer 3.2s linear infinite;background-size:200% 100%}
+  @media (prefers-reduced-motion: reduce){ .brand-shimmer{animation:none;color:var(--text);-webkit-background-clip:unset;background:none} }
+
+  /* generic card-row used to keep parity across sections */
+  .card-row{background:var(--card);padding:20px;border-radius:12px;box-shadow:var(--shadow-md);transition:transform var(--trans),box-shadow var(--trans);position:relative;overflow:visible}
+  .card-row:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
+
+  /* top tiny header row inside first card-row */
+  .top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .brand-wrap{display:flex;gap:12px;align-items:center}
+  .logo-mark{width:52px;height:52px;border-radius:10px;display:grid;place-items:center;color:white;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));font-size:18px}
+  .brand-text{display:flex;flex-direction:column}
+  .brand-sub{font-size:0.95rem;color:var(--muted)}
+
+  /* header back button (top-right) */
+  .header-back{
+    padding:8px 12px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;font-weight:700;cursor:pointer;
+    background-size:200% 100%;animation:shimmer 3.2s linear infinite;box-shadow:0 12px 34px rgba(124,58,237,0.08);transition:transform var(--trans),box-shadow var(--trans);
+  }
+  .header-back:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 28px 70px rgba(124,58,237,0.12)}
+  .header-back:focus{outline:3px solid rgba(124,58,237,0.12);outline-offset:3px}
+  @media (prefers-reduced-motion: reduce){ .header-back{animation:none} }
+
+  /* ROW 1 - image + meta */
+  .row-1-inner{display:grid;grid-template-columns:1.7fr 1fr;gap:20px;align-items:center}
+  @media (max-width:980px){ .row-1-inner{grid-template-columns:1fr;align-items:stretch} }
+
+  /* HERO IMAGE — fixed landscape aspect and responsive max-height
+     - Uses aspect-ratio: 16/9 so the image is always landscape.
+     - max-height controls how tall the hero gets on larger screens.
+     - The <img> fills the hero area with object-fit:cover (no distortion).
+  */
+  .hero{
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 20px 60px rgba(8,12,20,0.08);
+    background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4));
+    aspect-ratio: 16 / 9;           /* force landscape aspect */
+    max-height: 460px;             /* cap height on large screens */
+    width: 100%;
+  }
+  .hero img{
+    width:100%;
+    height:100%;
+    object-fit:cover;              /* cover the area without stretching */
+    display:block;
+    transition:transform var(--trans);
+  }
+
+  /* responsive adjustments keep the landscape feel but reduce max height */
+  @media (max-width:1280px){
+    .hero{max-height:420px}
+  }
+  @media (max-width:980px){
+    .hero{max-height:320px; aspect-ratio: 16 / 9}
+  }
+  @media (max-width:600px){
+    .hero{max-height:240px; aspect-ratio: 16 / 9}
+  }
+
+  .meta{display:flex;flex-direction:column;gap:12px;padding:6px 2px;justify-content:center}
+  .title{font-size:1.6rem;margin:0}
+  .short{color:var(--muted);margin:0}
+
+  .meta-grid{display:grid;grid-template-columns:1fr;gap:8px;font-size:0.95rem;color:var(--muted)}
+  .meta-row{display:flex;justify-content:space-between;align-items:center}
+  .badge{padding:8px 14px;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;font-weight:700;display:inline-block}
+
+  /* Ingredients: single white area with two columns inside */
+  .ingredients-columns{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media (max-width:900px){ .ingredients-columns{grid-template-columns:1fr} }
+  .ingredients-list{margin:0;padding-left:18px;line-height:1.6}
+  .ingredients-list li{margin:8px 0;color:var(--text)}
+
+  /* Methods: full-width stacked content (slow-cook first / tips) */
+  .methods-stack{display:grid;gap:18px}
+  .method p{margin:0 0 12px 0;line-height:1.8;color:var(--text)}
+  .method p strong{font-weight:700}
+
+  /* Video & player area (responsive iframe) */
+  .embed{width:100%;max-width:980px;margin:0 auto;position:relative;padding-top:56.25%;border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(8,12,20,0.08);transition:transform var(--trans);background:#000}
+  .embed iframe{position:absolute;left:0;top:0;width:100%;height:100%;border:0}
+  .video-overlay{position:absolute;left:0;top:0;width:100%;height:100%;display:grid;place-items:center;z-index:15;background:linear-gradient(180deg, rgba(0,0,0,0.22), rgba(0,0,0,0.28));transition:opacity .22s ease, visibility .22s}
+  .video-overlay.hidden{opacity:0;visibility:hidden;pointer-events:none}
+  .play-btn{width:86px;height:86px;border-radius:50%;border:none;background:linear-gradient(135deg,var(--accent2),var(--accent));display:grid;place-items:center;color:white;font-size:28px;cursor:pointer;box-shadow:0 18px 48px rgba(124,58,237,0.18);transition:transform .18s ease}
+  .play-btn:active{transform:scale(.98)}
+  .video-error{position:absolute;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;z-index:20;padding:18px;box-sizing:border-box;color:#fff;background:linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.6));font-size:15px}
+
+  .notes{line-height:1.6;color:var(--muted)}
+
+  /* footer back */
+  .footer{display:flex;justify-content:center}
+  .back-btn{padding:12px 22px;border-radius:12px;border:none;background:linear-gradient(90deg,var(--accent),var(--accent2));color:white;font-weight:700;cursor:pointer;background-size:200% 100%;animation:shimmer 3.2s linear infinite;box-shadow:0 24px 64px rgba(8,12,20,0.12);transition:transform var(--trans),box-shadow var(--trans)}
+  .back-btn:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 40px 100px rgba(8,12,20,0.18)}
+  @media (prefers-reduced-motion: reduce){ .back-btn{animation:none} }
+  [tabindex]:focus, button:focus, a:focus{outline:3px solid rgba(124,58,237,0.12);outline-offset:3px}
+
+  /* mini-chef (appears bottom-right of ingredient/method cards on hover) */
+  :root{--mini-scale:7}
+  .mini-chef-wrapper{position:absolute;right:12px;bottom:12px;width:calc(96px * var(--mini-scale) / 7);height:calc(96px * var(--mini-scale) / 7);pointer-events:none;opacity:0;transform:translateY(6px) scale(0.96);transition:opacity .28s ease, transform .28s ease;z-index:60}
+  .card-row:hover .mini-chef-wrapper,.card-row:focus-within .mini-chef-wrapper{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+  .mini-speech{position:absolute;right:110%;bottom:10%;background:#fff;border-radius:6px;padding:6px 8px;font-size:11px;box-shadow:0 6px 16px rgba(2,6,23,0.12);color:#0f172a;opacity:0;transform:translateY(4px);transition:all .22s ease-in-out;pointer-events:none;white-space:nowrap}
+  .mini-chef-wrapper.show-speech .mini-speech{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+  <div class="page" role="main">
+
+    <!-- ROW 1: top card-row (image + meta) -->
+    <section class="card-row" aria-label="Top row — image and meta">
+      <div class="top-row" role="banner" aria-label="Header">
+        <div class="brand-wrap" aria-hidden="true">
+          <div class="logo-mark">TG</div>
+          <div class="brand-text">
+            <div class="brand-shimmer" style="font-weight:800">TastyGrid</div>
+            <div class="brand-sub">Trusted home recipes</div>
+          </div>
+        </div>
+
+        <!-- header back button (top-right) -->
+        <div>
+          <a class="header-back" href="index.html" role="link" aria-label="Back to home (top)" title="Back to home">← Back to Home</a>
+        </div>
+      </div>
+
+      <div class="row-1-inner">
+        <figure class="hero" aria-hidden="false" style="margin:0">
+          <picture>
+            <!-- Replace path below with your image path or URL -->
+            <img src="Image/North Indian/Dal Makhani.jpeg" alt="Dal Makhani — creamy slow-simmered dal with rajma" loading="lazy" width="1600" height="900" style="display:block" data-image-default="images/dal-makhani-1200.jpg">
+          </picture>
+        </figure>
+
+        <div class="meta" role="region" aria-label="Recipe summary">
+          <h1 class="title">Dal Makhani (North Indian Classic)</h1>
+          <p class="short">Creamy slow-simmered whole urad dal blended with rajma, butter and cream — true comfort food when simmered slowly.</p>
+
+          <div class="meta-grid" aria-hidden="false">
+            <div class="meta-row"><span><strong>⭐ Rating</strong></span><span class="badge">4.5 ★</span></div>
+            <div class="meta-row"><span><strong>Difficulty</strong></span><span class="small">Medium — slow-cook</span></div>
+            <div class="meta-row"><span><strong>Serves</strong></span><span class="small">4</span></div>
+            <div class="meta-row"><span><strong>Time</strong></span><span class="small">Prep 15 min (+soak) • Cook 45–60 min</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROW 2: Ingredients (single white area, two columns inside) -->
+    <section class="card-row" aria-label="Ingredients">
+      <h2 style="margin:0 0 12px 0;font-size:1.05rem">Ingredients</h2>
+
+      <div class="ingredients-columns" role="region" aria-label="Ingredients list">
+        <div>
+          <h3 style="margin:0 0 10px 0">Lentils & Beans</h3>
+          <ul class="ingredients-list" role="list" aria-labelledby="lentilsHeading">
+            <li>1 cup whole black urad dal (sabut urad), soaked overnight</li>
+            <li>¼ cup rajma (kidney beans), soaked overnight</li>
+            <li>3–4 cups water (for cooking)</li>
+            <li>Salt to taste</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 style="margin:0 0 10px 0">For the Masala</h3>
+          <ul class="ingredients-list" role="list" aria-labelledby="masalaHeading">
+            <li>3 tbsp butter + 2 tbsp oil</li>
+            <li>2 onions, finely chopped</li>
+            <li>2 tbsp ginger–garlic paste</li>
+            <li>3 medium tomatoes, pureed</li>
+            <li>1 tsp turmeric powder</li>
+            <li>1 tsp red chilli powder</li>
+            <li>1 tsp cumin powder</li>
+            <li>1 tsp coriander powder</li>
+            <li>1 tsp garam masala</li>
+            <li>3–4 tbsp fresh cream (add more for richness)</li>
+            <li>A pinch kasuri methi (optional)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- mini-chef appears bottom-right on hover (click opens the video link) -->
+      <div class="mini-chef-wrapper" data-video="https://www.youtube.com/watch?v=mA5XjhdwJHc" aria-hidden="true">
+        <button class="mini-chef-chef-btn" aria-pressed="false" title="Chef" aria-label="Chef animation">
+          <div class="mini-chef-pixelwrap" aria-hidden="false">
+            <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+              <rect width="72" height="72" fill="transparent"/>
+              <g class="mini-body"><path d="M22 48 L50 48 L44 64 L28 64 Z" fill="#2b8a5f"/></g>
+            </svg>
+          </div>
+        </button>
+        <div class="mini-speech" aria-hidden="true">Tossing!</div>
+      </div>
+    </section>
+
+    <!-- ROW 3: Methods (stacked) -->
+    <section class="card-row" aria-label="Method">
+      <h2 style="margin:0 0 12px 0;font-size:1.05rem">Method — Slow-cook style</h2>
+
+      <div class="methods-stack" role="region" aria-label="Method steps">
+        <article>
+          <h3 style="margin:0 0 10px 0">1. Cook the dal and rajma</h3>
+          <div class="method">
+            <p><strong>Drain & add to cooker:</strong> Drain the soaked urad dal and rajma. Add them to a pressure cooker with 3–4 cups of water and 1 tsp salt.</p>
+            <p><strong>Pressure-cook:</strong> Cook for 6–8 whistles (times vary by cooker and bean softness). Aim until they are very soft — this is the base of the silky texture. After pressure releases, lightly mash a portion with the back of a ladle to help thicken the body.</p>
+          </div>
+        </article>
+
+        <article>
+          <h3 style="margin:0 0 10px 0">2. Prepare the makhani base</h3>
+          <div class="method">
+            <p><strong>Heat fat:</strong> Warm 3 tbsp butter + 2 tbsp oil in a heavy pan.</p>
+            <p><strong>Sauté onions:</strong> Add chopped onions and cook on medium-low until deep golden brown — this slow browning brings natural sweetness and depth.</p>
+            <p><strong>Add aromatics:</strong> Stir in ginger–garlic paste and cook until raw aroma disappears.</p>
+          </div>
+        </article>
+
+        <article>
+          <h3 style="margin:0 0 10px 0">3. Add tomatoes & spices</h3>
+          <div class="method">
+            <p><strong>Tomato stage:</strong> Pour in the pureed tomatoes. Add turmeric, red chilli, cumin and coriander powders. Cook until oil separates from the masala (important signal that masala is done).</p>
+          </div>
+        </article>
+
+        <article>
+          <h3 style="margin:0 0 10px 0">4. Combine & simmer</h3>
+          <div class="method">
+            <p><strong>Mix:</strong> Add the cooked dal-rajma mixture into the pan. Adjust consistency with extra water to reach creamy, flowing texture.</p>
+            <p><strong>Slow simmer:</strong> Let the pot simmer at the lowest flame for 30–45 minutes — the long gentle simmer develops the classic richness. Stir occasionally and add butter/cream in intervals to layer the flavor.</p>
+          </div>
+        </article>
+
+        <article>
+          <h3 style="margin:0 0 10px 0">5. Final touches</h3>
+          <div class="method">
+            <p><strong>Finish:</strong> Sprinkle garam masala, a pinch of crushed kasuri methi, and a final knob of butter. Stir gently.</p>
+            <p><strong>Serve:</strong> Serve piping hot with naan, jeera rice or rotis. For a smoky dhaba-style finish, use the coal-smoke technique (place hot coal in a small bowl with ghee inside the dal pot and cover for a few minutes).</p>
+          </div>
+        </article>
+
+        <article>
+          <h3 style="margin:0 0 10px 0">Pro Tips</h3>
+          <div class="method">
+            <p>Slow simmering is the secret — the longer you cook gently, the creamier and more complex the flavors become. Use butter and cream liberally if you like a restaurant-style richness.</p>
+          </div>
+        </article>
+      </div>
+
+      <!-- mini-chef for methods card (opens same YouTube link) -->
+      <div class="mini-chef-wrapper" data-video="https://www.youtube.com/watch?v=mA5XjhdwJHc" aria-hidden="true">
+        <button class="mini-chef-chef-btn" aria-pressed="false" title="Chef" aria-label="Chef animation">
+          <div class="mini-chef-pixelwrap" aria-hidden="false"><svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true"><rect width="72" height="72" fill="transparent"/></svg></div>
+        </button>
+        <div class="mini-speech" aria-hidden="true">Tossing!</div>
+      </div>
+    </section>
+
+    <!-- ROW 4: Video - using the provided iframe (youtube-nocookie) -->
+    <section class="card-row" aria-label="Video">
+      <h2 style="margin:0 0 12px 0;font-size:1.05rem">Watch this recipe</h2>
+
+      <div class="embed" role="region" aria-label="Recipe video">
+        <!-- Provided iframe, responsive via the .embed wrapper -->
+        <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/mA5XjhdwJHc?si=OzFnL7giCBWYG3ka&amp;start=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      </div>
+    </section>
+
+    <!-- ROW 5: Notes & serving -->
+    <section class="card-row notes" aria-label="Notes & Serving Suggestions">
+      <h2 style="margin:0 0 12px 0;font-size:1.05rem">Notes & Serving Suggestions</h2>
+      <p class="notes">Serve piping hot with buttered naan, jeera rice or rotis. A final drizzle of cream and a knob of butter at the end makes it feel luxurious. Refrigerate leftovers (up to 3 days) and reheat gently, adding a splash of water if thickened.</p>
+      <p class="notes">For smoky dhaba-style flavour: heat a small coal, place it in a tiny bowl with 1 tsp ghee, set inside the dal pot and cover immediately for 3–5 minutes to infuse smoke.</p>
+    </section>
+
+    <!-- footer -->
+    <div class="footer">
+      <a class="back-btn" href="index.html" aria-label="Back to home">← Back to Home</a>
+    </div>
+
+  </div>
+
+<script>
+/* Mini-chef interactivity (opens video in new tab when clicked).
+   Uses the dataset.video value (we set it to the YouTube watch URL).
+*/
+(function(){
+  function isActivationKey(e){ return e.key === 'Enter' || e.key === ' ' || e.code === 'Space' || e.key === 'Spacebar'; }
+  const wrappers = document.querySelectorAll('.mini-chef-wrapper');
+  wrappers.forEach(wrapper => {
+    const btn = wrapper.querySelector('.mini-chef-chef-btn');
+    const speech = wrapper.querySelector('.mini-speech');
+    const videoUrl = wrapper.dataset && wrapper.dataset.video ? wrapper.dataset.video.trim() : '';
+
+    const live = document.createElement('div');
+    live.setAttribute('aria-live','polite');
+    live.style.position='absolute'; live.style.left='-9999px'; document.body.appendChild(live);
+
+    let cycleTimer = null, speechTimer = null, hideSpeechTimer = null;
+
+    function showSpeech(text){
+      if(!speech) return;
+      speech.classList.add('show');
+      speech.style.opacity='1';
+      speech.style.transform='translateY(0)';
+      live.textContent = text;
+      clearTimeout(hideSpeechTimer);
+      hideSpeechTimer = setTimeout(()=> {
+        speech.style.opacity=''; speech.style.transform=''; live.textContent=''; speech.classList.remove('show');
+      }, 1200);
+    }
+
+    function startStirOnce(){
+      if(!btn) return;
+      btn.setAttribute('aria-pressed','true');
+      btn.classList.add('is-stir');
+      live.textContent = 'Chef is stirring';
+      clearTimeout(cycleTimer);
+      cycleTimer = setTimeout(()=> {
+        btn.classList.remove('is-stir');
+        btn.setAttribute('aria-pressed','false');
+        showSpeech('Tossed!');
+      }, 1000);
+    }
+
+    btn.addEventListener('mouseenter', ()=> { btn.classList.add('is-stir'); btn.setAttribute('aria-pressed','true'); });
+    btn.addEventListener('mouseleave', ()=> { btn.classList.remove('is-stir'); btn.setAttribute('aria-pressed','false'); clearTimeout(speechTimer); speechTimer = setTimeout(()=> showSpeech('Nice toss!'), 500); });
+
+    btn.addEventListener('click', (e)=> {
+      e.preventDefault();
+      if(videoUrl){
+        try{ window.open(videoUrl, '_blank', 'noopener'); } catch(err){ window.location.href = videoUrl; }
+      } else { showSpeech('No video configured'); }
+      startStirOnce();
+    });
+
+    btn.addEventListener('touchstart', (e)=> { e.preventDefault(); if(videoUrl){ try{ window.open(videoUrl,'_blank','noopener'); } catch(err){ window.location.href=videoUrl; } } startStirOnce(); }, {passive:false});
+
+    btn.addEventListener('keydown', (e)=> {
+      if(isActivationKey(e)){
+        e.preventDefault();
+        if(videoUrl){ try{ window.open(videoUrl,'_blank','noopener'); } catch(err){ window.location.href=videoUrl; } }
+        startStirOnce();
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
